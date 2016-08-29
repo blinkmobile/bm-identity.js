@@ -35,11 +35,10 @@ test.serial.cb('loginCommand() created from createLoginCommand should resolve to
     t.is(content, `
 Success! Welcome to BlinkMobile.
 `);
-    t.end();
   };
 
   const loginCommand = createLoginCommand();
-  loginCommand();
+  loginCommand().then(() => t.end());
 });
 
 test.serial.cb('loginCommand() created from createLoginCommand should should log error if login rejects with error', (t) => {
@@ -52,7 +51,7 @@ test.serial.cb('loginCommand() created from createLoginCommand should should log
     t.is(content, `
 There was a problem while attempting to login:
 
-  Errror Message
+Errror Message
 
 Please fix the error and try again.
 `);

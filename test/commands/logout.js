@@ -33,11 +33,10 @@ test.serial.cb('logoutCommand() created from createLogoutCommand should resolve 
     t.is(content, `
 Success! See you next time.
 `);
-    t.end();
   };
 
   const logoutCommand = createLogoutCommand();
-  logoutCommand();
+  logoutCommand().then(() => t.end());
 });
 
 test.serial.cb('logoutCommand() created from createLogoutCommand should should log error if logout rejects with error', (t) => {
@@ -50,7 +49,7 @@ test.serial.cb('logoutCommand() created from createLogoutCommand should should l
     t.is(content, `
 There was a problem while attempting to logout:
 
-  Errror Message
+Errror Message
 
 Please fix the error and try again.
 `);

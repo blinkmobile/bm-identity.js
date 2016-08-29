@@ -207,7 +207,7 @@ test.cb('login() loginProviderBase should contain phone number from prompt and c
     'inquirer': t.context.inquirer,
     'request': t.context.request,
     './login-provider-base.js': loginProviderBaseMock(null, null, (message, username, connection) => {
-      t.is(message, 'Please check you phone and enter the verification code: ');
+      t.is(message, 'Please check your phone and enter the verification code: ');
       t.is(username, PHONE_NUMBER);
       t.is(connection, 'sms');
       t.end();

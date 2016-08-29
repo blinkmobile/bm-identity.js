@@ -212,7 +212,7 @@ test.cb('login() loginProviderBase should contain email from prompt and connecti
     'inquirer': t.context.inquirer,
     'request': t.context.request,
     './login-provider-base.js': loginProviderBaseMock(null, null, (message, username, connection) => {
-      t.is(message, 'Please check you email and enter the verification code: ');
+      t.is(message, 'Please check your email and enter the verification code: ');
       t.is(username, EMAIL);
       t.is(connection, 'email');
       t.end();
