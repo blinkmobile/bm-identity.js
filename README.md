@@ -63,7 +63,7 @@ assumeAWSRole () => Promise{AssumedRoleCredentials}
 ```
 
 ```js
-interface LoginOptions {
+interface AssumedRoleCredentials {
   accessKeyId : String,
   secretAccessKey : String,
   sessionToken : String
@@ -72,7 +72,7 @@ interface LoginOptions {
 
 ### 2. Extend Existing CLI
 
-Extend an existing CLI with login and logout commands will allow for these commands to be used from the command line
+Extending an existing CLI with login and logout commands will allow for these commands to be used from the command line
 
 The login and logout commands internally call the login and logout functions from `BlinkMobileIdentity`
 
