@@ -24,7 +24,7 @@ Functions for the following:
 
 #### login
 
-If no LoginOptions are passed, a browser based login process will start.
+If no LoginOptions are passed, a browser based login process will start. This is how users can login using a social account e.g. Google.
 
 ```js
 login (options: LoginOptions) => Promise{String}
@@ -79,8 +79,8 @@ The login and logout commands internally call the login and logout functions fro
 #### Useage
 
 ```
-login                       => Start the login process, if no flags are passed, a browser based login will begin
-  --username <username>     => username to login with, if password is not specified, you will be prompted to for it
+login                       => start the login process, if no flags are passed, a browser based login will begin
+  --username <username>     => username to login with, if password is not specified, you will be prompted for it
   --password <password>	    => password to login with, requires the username flag as well
   --email <email>           => email address to send code to for passwordless authentication
   --sms <phone>             => phone number to send code to for passwordless authentication
@@ -91,10 +91,10 @@ logout                      => logout of the service being extended
 #### Examples
 
 ```
-bm service login --username                     => Start a username and password login process and will prompt for both
-bm service login --username email@provider.com  => Start a username and password login process and will prompt for password only
-bm service login --email                        => Start a passwordless email login process and will prompt for an email address
+bm service login --username                     => Start a username and password login process which will prompt for both
+bm service login --username email@provider.com  => Start a username and password login process which will prompt for password only
+bm service login --email                        => Start a passwordless email login process which will prompt for an email address
 bm service login --sms +61412345678             => Start a passwordless sms login process
-bm service login                                => Will start a browser based login process.
-bm service logout                               => Will begin the logout process.
+bm service login                                => Start a browser based login process.
+bm service logout                               => Start the logout process.
 ```
