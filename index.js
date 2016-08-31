@@ -5,6 +5,7 @@ const loginCommand = require('./lib/commands/login.js');
 const loginCommon = require('./lib/common/login.js');
 const logoutCommand = require('./lib/commands/logout.js');
 const logoutCommon = require('./lib/common/logout.js');
+const profile = require('./lib/auth0/profile.js');
 
 const privateVars = new WeakMap();
 
@@ -46,16 +47,14 @@ class BlinkMobileIdentity {
    * @returns {String} The JWT generated after a successful login.
    */
   login (options) {
-    const clientName = privateVars.get(this).clientName;
-    return loginCommon.login(clientName, options);
+    return loginCommon.login(privateVars.get(this).clientName, options);
   }
 
   /**
    * Logout of the client.
    */
   logout () {
-    const clientName = privateVars.get(this).clientName;
-    return logoutCommon.logout(clientName);
+    return logoutCommon.logout(privateVars.get(this).clientName);
   }
 
   /**
@@ -64,8 +63,15 @@ class BlinkMobileIdentity {
    * @returns {Object} The AWS credentials.
    */
   assumeAWSRole (getAWSRoleParams) {
-    const clientName = privateVars.get(this).clientName;
-    return assumeRole(clientName, getAWSRoleParams);
+    return assumeRole(privateVars.get(this).clientName, getAWSRoleParams);
+  }
+
+  /**
+   * Get the Auth0 profile for the current user.
+   * @returns {Object} The Auth0 profile.
+   */
+  getProfile () {
+    return profile.getByClient(privateVars.get(this).clientName);
   }
 }
 

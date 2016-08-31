@@ -3,15 +3,15 @@
 const test = require('ava');
 const proxyquire = require('proxyquire');
 
-const blinkmrcMock = require('../helpers/blinkmrc.js');
+const profileMock = require('../helpers/profile.js');
 const awsMock = require('../helpers/aws-sdk.js');
-const requestMock = require('../helpers/request.js');
 
 const TEST_SUBJECT = '../../lib/aws/assume-role.js';
 
 const ACCESS_KEY_ID = 'valid access key id';
 const SECRET_ACCESS_KEY = 'valid secret access key';
 const SESSION_TOKEN = 'valid session token';
+const CLIENT_NAME = 'valid client name';
 const JWT = 'a valid jwt';
 const PROFILE = {
   name: 'FirstName LastName',
@@ -27,9 +27,13 @@ const getRoleParams = (profile) => {
 };
 
 test.beforeEach((t) => {
-  t.context.blinkmrc = blinkmrcMock(() => {
-    return Promise.resolve({accessToken: JWT});
+  t.context.profile = profileMock((jwt) => {
+    return Promise.resolve(PROFILE);
   });
+
+  t.context.getJWT = (clientName) => {
+    return Promise.resolve(JWT);
+  };
 
   t.context.AWS = awsMock((roleParams, callback) => {
     callback(null, {
@@ -41,25 +45,19 @@ test.beforeEach((t) => {
     });
   });
 
-  t.context.request = requestMock((url, data, callback) => {
-    callback(null, {}, PROFILE);
-  });
-
   t.context.getAWSRoleParams = (profile, callback) => {
     callback(null, getRoleParams(profile));
   };
-
-  t.context.clientName = 'Client Name';
 });
 
 test.cb('assumeRole() should return valid aws credentials', (t) => {
   const assumeRole = proxyquire(TEST_SUBJECT, {
     'aws-sdk': t.context.AWS,
-    'request': t.context.request,
-    '@blinkmobile/blinkmrc': t.context.blinkmrc
+    '../auth0/profile.js': t.context.profile,
+    '../utils/get-jwt.js': t.context.getJWT
   });
 
-  assumeRole(t.context.clientName, t.context.getAWSRoleParams)
+  assumeRole(CLIENT_NAME, t.context.getAWSRoleParams)
     .then((assumedRole) => {
       t.deepEqual(assumedRole, {
         accessKeyId: ACCESS_KEY_ID,
@@ -68,40 +66,40 @@ test.cb('assumeRole() should return valid aws credentials', (t) => {
       });
       t.end();
     })
-    .catch(() => {
-      t.fail();
+    .catch((error) => {
+      t.fail(error);
       t.end();
     });
 });
 
-test.cb('assumeRole() should call blinkmrc to get access token with clientName', (t) => {
+test.cb('assumeRole() should call getJwt() to get access token with clientName', (t) => {
   const assumeRole = proxyquire(TEST_SUBJECT, {
     'aws-sdk': t.context.AWS,
-    'request': t.context.request,
-    '@blinkmobile/blinkmrc': blinkmrcMock((options) => {
-      t.is(options.name, t.context.clientName);
+    '../auth0/profile.js': t.context.profile,
+    '../utils/get-jwt.js': (clientName) => {
+      t.is(clientName, CLIENT_NAME);
       t.end();
-      return Promise.resolve({accessToken: JWT});
-    })
+      return Promise.resolve(JWT);
+    }
   });
 
-  assumeRole(t.context.clientName, t.context.getAWSRoleParams)
-    .catch(() => {
-      t.fail();
+  assumeRole(CLIENT_NAME, t.context.getAWSRoleParams)
+    .catch((error) => {
+      t.fail(error);
       t.end();
     });
 });
 
-test.cb('assumeRole() should reject if a jwt is not found from blinkmrc', (t) => {
+test.cb('assumeRole() should reject if a jwt is not found from getJwt()', (t) => {
   const assumeRole = proxyquire(TEST_SUBJECT, {
     'aws-sdk': t.context.AWS,
-    'request': t.context.request,
-    '@blinkmobile/blinkmrc': blinkmrcMock(() => {
-      return Promise.resolve({});
-    })
+    '../auth0/profile.js': t.context.profile,
+    '../utils/get-jwt.js': (clientName) => {
+      return Promise.resolve();
+    }
   });
 
-  assumeRole(t.context.clientName, t.context.getAWSRoleParams)
+  assumeRole(CLIENT_NAME, t.context.getAWSRoleParams)
     .then(() => {
       t.fail();
       t.end();
@@ -112,60 +110,20 @@ test.cb('assumeRole() should reject if a jwt is not found from blinkmrc', (t) =>
     });
 });
 
-test.cb('assumeRole() should call request with the jwt token returned from blinkmrc', (t) => {
+test.cb('assumeRole() should call profile.getByJWT() with the jwt token returned from getJwt()', (t) => {
   const assumeRole = proxyquire(TEST_SUBJECT, {
     'aws-sdk': t.context.AWS,
-    'request': requestMock((url, data, callback) => {
-      t.is(data.json.id_token, JWT);
+    '../auth0/profile.js': profileMock((jwt) => {
+      t.is(jwt, JWT);
       t.end();
-      callback(null, {}, PROFILE);
+      return Promise.resolve(PROFILE);
     }),
-    '@blinkmobile/blinkmrc': t.context.blinkmrc
+    '../utils/get-jwt.js': t.context.getJWT
   });
 
-  assumeRole(t.context.clientName, t.context.getAWSRoleParams)
-    .catch(() => {
-      t.fail();
-      t.end();
-    });
-});
-
-test.cb('assumeRole() should reject if a request returns an error', (t) => {
-  const assumeRole = proxyquire(TEST_SUBJECT, {
-    'aws-sdk': t.context.AWS,
-    'request': requestMock((url, data, callback) => {
-      callback('Test error message');
-    }),
-    '@blinkmobile/blinkmrc': t.context.blinkmrc
-  });
-
-  assumeRole(t.context.clientName, t.context.getAWSRoleParams)
-    .then(() => {
-      t.fail();
-      t.end();
-    })
+  assumeRole(CLIENT_NAME, t.context.getAWSRoleParams)
     .catch((error) => {
-      t.is('Test error message', error);
-      t.end();
-    });
-});
-
-test.cb('assumeRole() should reject if a request returns \'Unauthorized\'', (t) => {
-  const assumeRole = proxyquire(TEST_SUBJECT, {
-    'aws-sdk': t.context.AWS,
-    'request': requestMock((url, data, callback) => {
-      callback(null, {}, 'Unauthorized');
-    }),
-    '@blinkmobile/blinkmrc': t.context.blinkmrc
-  });
-
-  assumeRole(t.context.clientName, t.context.getAWSRoleParams)
-    .then(() => {
-      t.fail();
-      t.end();
-    })
-    .catch((error) => {
-      t.is('Unauthorized, your access token may have expired. Please use the login command to login again.', error);
+      t.fail(error);
       t.end();
     });
 });
@@ -173,11 +131,11 @@ test.cb('assumeRole() should reject if a request returns \'Unauthorized\'', (t) 
 test.cb('assumeRole() should call getAWSRoleParams with the profile returned from request', (t) => {
   const assumeRole = proxyquire(TEST_SUBJECT, {
     'aws-sdk': t.context.AWS,
-    'request': t.context.request,
-    '@blinkmobile/blinkmrc': t.context.blinkmrc
+    '../auth0/profile.js': t.context.profile,
+    '../utils/get-jwt.js': t.context.getJWT
   });
 
-  assumeRole(t.context.clientName, (profile, callback) => {
+  assumeRole(CLIENT_NAME, (profile, callback) => {
     t.deepEqual(profile, PROFILE);
     t.end();
     callback(null, {
@@ -185,8 +143,8 @@ test.cb('assumeRole() should call getAWSRoleParams with the profile returned fro
       RoleSessionName: `Temp-CLI-User-${profile.name}`
     });
   })
-  .catch(() => {
-    t.fail();
+  .catch((error) => {
+    t.fail(error);
     t.end();
   });
 });
@@ -194,11 +152,11 @@ test.cb('assumeRole() should call getAWSRoleParams with the profile returned fro
 test.cb('assumeRole() should reject if a getAWSRoleParams returns an error', (t) => {
   const assumeRole = proxyquire(TEST_SUBJECT, {
     'aws-sdk': t.context.AWS,
-    'request': t.context.request,
-    '@blinkmobile/blinkmrc': t.context.blinkmrc
+    '../auth0/profile.js': t.context.profile,
+    '../utils/get-jwt.js': t.context.getJWT
   });
 
-  assumeRole(t.context.clientName, (profile, callback) => {
+  assumeRole(CLIENT_NAME, (profile, callback) => {
     callback('test error message');
   })
   .then(() => {
@@ -227,11 +185,11 @@ test.cb('assumeRole() should call assumeRoleWithWebIdentity with the role params
         }
       });
     }),
-    'request': t.context.request,
-    '@blinkmobile/blinkmrc': t.context.blinkmrc
+    '../auth0/profile.js': t.context.profile,
+    '../utils/get-jwt.js': t.context.getJWT
   });
 
-  assumeRole(t.context.clientName, t.context.getAWSRoleParams)
+  assumeRole(CLIENT_NAME, t.context.getAWSRoleParams)
     .catch((error) => {
       t.is('test error message', error);
       t.end();
@@ -243,11 +201,11 @@ test.cb('assumeRole() should reject if assumeRoleWithWebIdentity returns an erro
     'aws-sdk': awsMock((roleParams, callback) => {
       callback('test error message');
     }),
-    'request': t.context.request,
-    '@blinkmobile/blinkmrc': t.context.blinkmrc
+    '../auth0/profile.js': t.context.profile,
+    '../utils/get-jwt.js': t.context.getJWT
   });
 
-  assumeRole(t.context.clientName, t.context.getAWSRoleParams)
+  assumeRole(CLIENT_NAME, t.context.getAWSRoleParams)
     .then(() => {
       t.fail();
       t.end();

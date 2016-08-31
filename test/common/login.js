@@ -37,7 +37,7 @@ test.beforeEach((t) => {
 
 test.cb('login() should return valid jwt from provider', (t) => {
   const commonLogin = proxyquire(TEST_SUBJECT, {
-    '../auth0-client-factory.js': t.context.auth0ClientFactory,
+    '../auth0/client-factory.js': t.context.auth0ClientFactory,
     '../login-providers/username.js': t.context.usernameLoginProvider,
     '../login-providers/email.js': t.context.emailLoginProvider,
     '../login-providers/sms.js': t.context.smsLoginProvider,
@@ -57,7 +57,7 @@ test.cb('login() should return valid jwt from provider', (t) => {
 
 test.cb('login() should call auth0ClientFactory with clientName from login', (t) => {
   const commonLogin = proxyquire(TEST_SUBJECT, {
-    '../auth0-client-factory.js': auth0ClientFactoryMock((clientName) => {
+    '../auth0/client-factory.js': auth0ClientFactoryMock((clientName) => {
       t.is(clientName, t.context.clientName);
       t.end();
       return Promise.resolve(CLIENT_ID);
@@ -77,7 +77,7 @@ test.cb('login() should call auth0ClientFactory with clientName from login', (t)
 
 test.cb('login() should create a usernameLoginProvider if all options are passed', (t) => {
   const commonLogin = proxyquire(TEST_SUBJECT, {
-    '../auth0-client-factory.js': t.context.auth0ClientFactory,
+    '../auth0/client-factory.js': t.context.auth0ClientFactory,
     '../login-providers/username.js': loginProviderMock((clientId, username, password) => {
       t.is(clientId, CLIENT_ID);
       t.is(username, 'test');
@@ -104,7 +104,7 @@ test.cb('login() should create a usernameLoginProvider if all options are passed
 
 test.cb('login() should create an emailLoginProvider if all options but username are', (t) => {
   const commonLogin = proxyquire(TEST_SUBJECT, {
-    '../auth0-client-factory.js': t.context.auth0ClientFactory,
+    '../auth0/client-factory.js': t.context.auth0ClientFactory,
     '../login-providers/username.js': t.context.usernameLoginProvider,
     '../login-providers/email.js': loginProviderMock((clientId, email) => {
       t.is(clientId, CLIENT_ID);
@@ -128,7 +128,7 @@ test.cb('login() should create an emailLoginProvider if all options but username
 
 test.cb('login() should create an smsLoginProvider if only the sms option is passed', (t) => {
   const commonLogin = proxyquire(TEST_SUBJECT, {
-    '../auth0-client-factory.js': t.context.auth0ClientFactory,
+    '../auth0/client-factory.js': t.context.auth0ClientFactory,
     '../login-providers/username.js': t.context.usernameLoginProvider,
     '../login-providers/email.js': t.context.emailLoginProvider,
     '../login-providers/sms.js': loginProviderMock((clientId, phoneNumber) => {
@@ -151,7 +151,7 @@ test.cb('login() should create an smsLoginProvider if only the sms option is pas
 
 test.cb('login() should create an browserLoginProvider if no option are passed', (t) => {
   const commonLogin = proxyquire(TEST_SUBJECT, {
-    '../auth0-client-factory.js': t.context.auth0ClientFactory,
+    '../auth0/client-factory.js': t.context.auth0ClientFactory,
     '../login-providers/username.js': t.context.usernameLoginProvider,
     '../login-providers/email.js': t.context.emailLoginProvider,
     '../login-providers/sms.js': t.context.smsLoginProvider,
