@@ -78,14 +78,6 @@ getProfile () => Promise{Auth0Profile}
 
 See [Auth0 Profile Structure](https://auth0.com/docs/user-profile/user-profile-structure) for available properties. 
 
-```js
-interface AssumedRoleCredentials {
-  accessKeyId : String,
-  secretAccessKey : String,
-  sessionToken : String
-}
-```
-
 ### 2. Extend Existing CLI
 
 Extending an existing CLI with login and logout commands will allow for these commands to be used from the command line
