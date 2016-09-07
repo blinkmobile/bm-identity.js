@@ -89,7 +89,7 @@ test.cb('getByJWT() should reject if a jwt is not truthy', (t) => {
       t.end();
     })
     .catch((error) => {
-      t.is('Unauthenicated, please login before using this service.', error);
+      t.is('Unauthenticated, please login before using this service.', error);
       t.end();
     });
 });
@@ -144,7 +144,7 @@ test.cb('getByJWT() should reject if a request returns \'Unauthorized\'', (t) =>
       t.end();
     })
     .catch((error) => {
-      t.is('Unauthorized, your access token may have expired. Please use the login command to login again.', error);
+      t.is('Unauthorised, your access token may have expired. Please use the login command to login again.', error);
       t.end();
     });
 });

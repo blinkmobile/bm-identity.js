@@ -145,7 +145,7 @@ test.cb('assumeRole() should reject if a jwt is not found from getJwt()', (t) =>
       t.end();
     })
     .catch((error) => {
-      t.is('Unauthenicated, please login before using this service.', error);
+      t.is('Unauthenticated, please login before using this service.', error);
       t.end();
     });
 });
@@ -243,7 +243,7 @@ test.cb('assumeRole() should should reject with custom message if request return
       t.end();
     })
     .catch((error) => {
-      t.is(error, 'Unauthorized, your access token has expired. Please login again.');
+      t.is(error, 'Unauthorised, your access token has expired. Please login again.');
       t.end();
     });
 });
