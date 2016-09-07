@@ -11,7 +11,6 @@ const TEST_SUBJECT = '../../lib/login-providers/sms.js';
 const constants = require('../../lib/constants.js');
 
 const CLIENT_ID = 'valid client id';
-const CLIENT_NAME = 'valid client name';
 const JWT = 'valid jwt';
 const PHONE_NUMBER = '+61234567890';
 
@@ -35,7 +34,7 @@ test.cb('login() should return valid jwt', (t) => {
     'request': t.context.request,
     './login-provider-base.js': t.context.loginProviderBase
   });
-  const smsLoginProvider = new SMSLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const smsLoginProvider = new SMSLoginProvider(CLIENT_ID);
 
   smsLoginProvider.login(PHONE_NUMBER)
     .then((jwt) => {
@@ -49,11 +48,11 @@ test.cb('login() should return valid jwt', (t) => {
 });
 
 test.cb('login() should ask for phone number if phone number is not passed in', (t) => {
+  t.plan(2);
   const SMSLoginProvider = proxyquire(TEST_SUBJECT, {
     'inquirer': inquirerMock((questions) => {
       t.truthy(questions.find(question => question.name === 'phoneNumber'));
       t.is(questions.length, 1);
-      t.end();
       return Promise.resolve({
         phoneNumber: PHONE_NUMBER
       });
@@ -61,31 +60,12 @@ test.cb('login() should ask for phone number if phone number is not passed in', 
     'request': t.context.request,
     './login-provider-base.js': t.context.loginProviderBase
   });
-  const smsLoginProvider = new SMSLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const smsLoginProvider = new SMSLoginProvider(CLIENT_ID);
 
   smsLoginProvider.login()
-    .catch(() => {
-      t.fail();
+    .then(() => {
       t.end();
-    });
-});
-
-test.cb('login() should prompt for phone number if phone number is not passed in as a string', (t) => {
-  const SMSLoginProvider = proxyquire(TEST_SUBJECT, {
-    'inquirer': inquirerMock((questions) => {
-      t.truthy(questions.find(question => question.name === 'phoneNumber'));
-      t.is(questions.length, 1);
-      t.end();
-      return Promise.resolve({
-        phoneNumber: PHONE_NUMBER
-      });
-    }),
-    'request': t.context.request,
-    './login-provider-base.js': t.context.loginProviderBase
-  });
-  const smsLoginProvider = new SMSLoginProvider(CLIENT_ID, CLIENT_NAME);
-
-  smsLoginProvider.login(true)
+    })
     .catch(() => {
       t.fail();
       t.end();
@@ -100,7 +80,7 @@ test.cb('login() should should reject if phone number is not returned from the p
     'request': t.context.request,
     './login-provider-base.js': t.context.loginProviderBase
   });
-  const smsLoginProvider = new SMSLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const smsLoginProvider = new SMSLoginProvider(CLIENT_ID);
 
   smsLoginProvider.login()
     .catch(error => {
@@ -124,7 +104,7 @@ test.cb('login() request for passwordless start should use correct data and url'
     }),
     './login-provider-base.js': t.context.loginProviderBase
   });
-  const smsLoginProvider = new SMSLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const smsLoginProvider = new SMSLoginProvider(CLIENT_ID);
 
   smsLoginProvider.login()
     .catch(() => {
@@ -141,7 +121,7 @@ test.cb('login() should should reject if request returns an error', (t) => {
     }),
     './login-provider-base.js': t.context.loginProviderBase
   });
-  const smsLoginProvider = new SMSLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const smsLoginProvider = new SMSLoginProvider(CLIENT_ID);
 
   smsLoginProvider.login()
     .then(() => {
@@ -165,7 +145,7 @@ test.cb('login() should should reject if request returns an error in the body', 
     }),
     './login-provider-base.js': t.context.loginProviderBase
   });
-  const smsLoginProvider = new SMSLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const smsLoginProvider = new SMSLoginProvider(CLIENT_ID);
 
   smsLoginProvider.login()
     .then(() => {
@@ -173,7 +153,7 @@ test.cb('login() should should reject if request returns an error in the body', 
       t.end();
     })
     .catch(error => {
-      t.is(error, 'error code: test error message');
+      t.is(error, 'test error message');
       t.end();
     });
 });
@@ -189,7 +169,7 @@ test.cb('login() should should reject with custom message if request returns an 
     }),
     './login-provider-base.js': t.context.loginProviderBase
   });
-  const smsLoginProvider = new SMSLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const smsLoginProvider = new SMSLoginProvider(CLIENT_ID);
 
   smsLoginProvider.login()
     .then(() => {
@@ -214,7 +194,7 @@ test.cb('login() loginProviderBase should contain phone number from prompt and c
       return Promise.resolve(JWT);
     })
   });
-  const smsLoginProvider = new SMSLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const smsLoginProvider = new SMSLoginProvider(CLIENT_ID);
 
   smsLoginProvider.login()
     .catch(() => {
@@ -231,7 +211,7 @@ test.cb('login() should should reject if loginProviderBase returns an error', (t
       return Promise.reject('Test error message');
     })
   });
-  const smsLoginProvider = new SMSLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const smsLoginProvider = new SMSLoginProvider(CLIENT_ID);
 
   smsLoginProvider.login()
     .then(() => {

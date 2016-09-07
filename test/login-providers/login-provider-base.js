@@ -4,14 +4,13 @@ const test = require('ava');
 const proxyquire = require('proxyquire');
 
 const inquirerMock = require('../helpers/inquirer.js');
-const blinkmrcMock = require('../helpers/blinkmrc.js');
+const userConfigStoreMock = require('../helpers/user-config.js');
 const requestMock = require('../helpers/request.js');
 
 const TEST_SUBJECT = '../../lib/login-providers/login-provider-base.js';
 const constants = require('../../lib/constants.js');
 
 const CLIENT_ID = 'valid client id';
-const CLIENT_NAME = 'valid client name';
 const JWT = 'valid jwt';
 const USERNAME = 'username';
 const PASSWORD = 'password';
@@ -20,7 +19,7 @@ const MESSAGE = 'prompt message: ';
 const CODE = 'abc123';
 
 test.beforeEach((t) => {
-  t.context.blinkmrc = blinkmrcMock(() => {
+  t.context.userConfigStore = userConfigStoreMock(() => {
     return Promise.resolve({accessToken: JWT});
   });
 
@@ -41,9 +40,9 @@ test.cb('storeJWT() should return valid jwt', (t) => {
   const LoginProviderBase = proxyquire(TEST_SUBJECT, {
     'inquirer': t.context.inquirer,
     'request': t.context.request,
-    'blinkmrc': t.context.blinkmrc
+    '../utils/user-config.js': t.context.userConfigStore
   });
-  const loginProviderBase = new LoginProviderBase(CLIENT_ID, CLIENT_NAME);
+  const loginProviderBase = new LoginProviderBase(CLIENT_ID);
 
   loginProviderBase.storeJWT(JWT)
     .then((jwt) => {
@@ -60,9 +59,9 @@ test.cb('requestJWT() should return valid jwt', (t) => {
   const LoginProviderBase = proxyquire(TEST_SUBJECT, {
     'inquirer': t.context.inquirer,
     'request': t.context.request,
-    'blinkmrc': t.context.blinkmrc
+    '../utils/user-config.js': t.context.userConfigStore
   });
-  const loginProviderBase = new LoginProviderBase(CLIENT_ID, CLIENT_NAME);
+  const loginProviderBase = new LoginProviderBase(CLIENT_ID);
 
   loginProviderBase.requestJWT(USERNAME, PASSWORD, CONNECTION)
     .then((jwt) => {
@@ -91,9 +90,9 @@ test.cb('requestJWT() request for jwt should use correct data and url', (t) => {
       t.end();
       callback(null, {}, {});
     }),
-    'blinkmrc': t.context.blinkmrc
+    '../utils/user-config.js': t.context.userConfigStore
   });
-  const loginProviderBase = new LoginProviderBase(CLIENT_ID, CLIENT_NAME);
+  const loginProviderBase = new LoginProviderBase(CLIENT_ID);
 
   loginProviderBase.requestJWT(USERNAME, PASSWORD, CONNECTION)
     .catch(() => {
@@ -108,9 +107,9 @@ test.cb('requestJWT() should reject if request returns an error', (t) => {
     'request': requestMock((url, body, callback) => {
       callback('Test error message');
     }),
-    'blinkmrc': t.context.blinkmrc
+    '../utils/user-config.js': t.context.userConfigStore
   });
-  const loginProviderBase = new LoginProviderBase(CLIENT_ID, CLIENT_NAME);
+  const loginProviderBase = new LoginProviderBase(CLIENT_ID);
 
   loginProviderBase.requestJWT(USERNAME, PASSWORD, CONNECTION)
     .then(() => {
@@ -132,9 +131,9 @@ test.cb('requestJWT() should reject if request returns an bad connection error i
         error_description: 'test error message'
       });
     }),
-    'blinkmrc': t.context.blinkmrc
+    '../utils/user-config.js': t.context.userConfigStore
   });
-  const loginProviderBase = new LoginProviderBase(CLIENT_ID, CLIENT_NAME);
+  const loginProviderBase = new LoginProviderBase(CLIENT_ID);
 
   loginProviderBase.requestJWT(USERNAME, PASSWORD, CONNECTION)
     .then(() => {
@@ -142,7 +141,7 @@ test.cb('requestJWT() should reject if request returns an bad connection error i
       t.end();
     })
     .catch(error => {
-      t.is(error, 'error code: test error message');
+      t.is(error, 'test error message');
       t.end();
     });
 });
@@ -162,9 +161,9 @@ test.cb('promptForCode() should prompt with the messge passed in', (t) => {
       });
     }),
     'request': t.context.request,
-    'blinkmrc': t.context.blinkmrc
+    '../utils/user-config.js': t.context.userConfigStore
   });
-  const loginProviderBase = new LoginProviderBase(CLIENT_ID, CLIENT_NAME);
+  const loginProviderBase = new LoginProviderBase(CLIENT_ID);
 
   loginProviderBase.promptForCode(MESSAGE, USERNAME, CONNECTION)
     .catch((error) => {
@@ -182,9 +181,9 @@ test.cb('promptForCode() should reject if prompt does not return code', (t) => {
       });
     }),
     'request': t.context.request,
-    'blinkmrc': t.context.blinkmrc
+    '../utils/user-config.js': t.context.userConfigStore
   });
-  const loginProviderBase = new LoginProviderBase(CLIENT_ID, CLIENT_NAME);
+  const loginProviderBase = new LoginProviderBase(CLIENT_ID);
 
   loginProviderBase.promptForCode(MESSAGE, USERNAME, CONNECTION)
     .then(() => {

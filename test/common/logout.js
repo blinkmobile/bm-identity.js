@@ -5,7 +5,7 @@ const proxyquire = require('proxyquire');
 
 const constants = require('../../lib/constants.js');
 
-const blinkmrcMock = require('../helpers/blinkmrc.js');
+const userConfigStoreMock = require('../helpers/user-config.js');
 const requestMock = require('../helpers/request.js');
 const auth0ClientFactoryMock = require('../helpers/auth0-client-factory.js');
 
@@ -15,7 +15,7 @@ const CLIENT_ID = 'valid client id';
 const JWT = 'a valid jwt';
 
 test.beforeEach((t) => {
-  t.context.blinkmrc = blinkmrcMock(null, (updateFn, options) => {
+  t.context.userConfigStore = userConfigStoreMock(null, (updateFn, options) => {
     return Promise.resolve(updateFn({accessToken: JWT}));
   });
 
@@ -34,7 +34,7 @@ test('logout() should not reject', (t) => {
   const commonLogout = proxyquire(TEST_SUBJECT, {
     '../auth0/client-factory.js': t.context.auth0ClientFactory,
     'request': t.context.request,
-    '@blinkmobile/blinkmrc': t.context.blinkmrc
+    '../utils/user-config.js': t.context.userConfigStore
   });
 
   t.notThrows(commonLogout.logout(t.context.clientName));
@@ -48,7 +48,7 @@ test.cb('logout() should call auth0ClientFactory with clientName from logout', (
       return Promise.resolve(CLIENT_ID);
     }),
     'request': t.context.request,
-    '@blinkmobile/blinkmrc': t.context.blinkmrc
+    '../utils/user-config.js': t.context.userConfigStore
   });
 
   commonLogout.logout(t.context.clientName)
@@ -66,7 +66,7 @@ test.cb('logout() should call request with the clientId returned from auth0Clien
       t.end();
       callback(null, {}, 'OK');
     }),
-    '@blinkmobile/blinkmrc': t.context.blinkmrc
+    '../utils/user-config.js': t.context.userConfigStore
   });
 
   commonLogout.logout(t.context.clientName)
@@ -82,7 +82,7 @@ test.cb('logout() should reject if a request returns an error', (t) => {
     'request': requestMock(null, (url, callback) => {
       callback('Test error message');
     }),
-    '@blinkmobile/blinkmrc': t.context.blinkmrc
+    '../utils/user-config.js': t.context.userConfigStore
   });
 
   commonLogout.logout(t.context.clientName)
@@ -96,12 +96,12 @@ test.cb('logout() should reject if a request returns an error', (t) => {
     });
 });
 
-test.cb('logout() should call blinkmrc to update and remove access token with clientName', (t) => {
+test.cb('logout() should call userConfigStore.update() to update and remove access token with clientName', (t) => {
   const commonLogout = proxyquire(TEST_SUBJECT, {
     '../auth0/client-factory.js': t.context.auth0ClientFactory,
     'request': t.context.request,
-    '@blinkmobile/blinkmrc': blinkmrcMock(null, (updateFn, options) => {
-      t.is(options.name, t.context.clientName);
+    '../utils/user-config.js': userConfigStoreMock(null, (updateFn) => {
+      t.pass();
       t.end();
       return Promise.resolve(updateFn({accessToken: JWT}));
     })

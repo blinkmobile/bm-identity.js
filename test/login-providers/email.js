@@ -11,7 +11,6 @@ const TEST_SUBJECT = '../../lib/login-providers/email.js';
 const constants = require('../../lib/constants.js');
 
 const CLIENT_ID = 'valid client id';
-const CLIENT_NAME = 'valid client name';
 const JWT = 'valid jwt';
 const EMAIL = 'email.com';
 
@@ -35,7 +34,7 @@ test.cb('login() should return valid jwt', (t) => {
     'request': t.context.request,
     './login-provider-base.js': t.context.loginProviderBase
   });
-  const emailLoginProvider = new EmailLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const emailLoginProvider = new EmailLoginProvider(CLIENT_ID);
 
   emailLoginProvider.login(EMAIL)
     .then((jwt) => {
@@ -49,11 +48,11 @@ test.cb('login() should return valid jwt', (t) => {
 });
 
 test.cb('login() should ask for email if email is not passed in', (t) => {
+  t.plan(2);
   const EmailLoginProvider = proxyquire(TEST_SUBJECT, {
     'inquirer': inquirerMock((questions) => {
       t.truthy(questions.find(question => question.name === 'email'));
       t.is(questions.length, 1);
-      t.end();
       return Promise.resolve({
         email: EMAIL
       });
@@ -61,31 +60,12 @@ test.cb('login() should ask for email if email is not passed in', (t) => {
     'request': t.context.request,
     './login-provider-base.js': t.context.loginProviderBase
   });
-  const emailLoginProvider = new EmailLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const emailLoginProvider = new EmailLoginProvider(CLIENT_ID);
 
   emailLoginProvider.login()
-    .catch(() => {
-      t.fail();
+    .then(() => {
       t.end();
-    });
-});
-
-test.cb('login() should prompt for email if email is not passed in as a string', (t) => {
-  const EmailLoginProvider = proxyquire(TEST_SUBJECT, {
-    'inquirer': inquirerMock((questions) => {
-      t.truthy(questions.find(question => question.name === 'email'));
-      t.is(questions.length, 1);
-      t.end();
-      return Promise.resolve({
-        email: EMAIL
-      });
-    }),
-    'request': t.context.request,
-    './login-provider-base.js': t.context.loginProviderBase
-  });
-  const emailLoginProvider = new EmailLoginProvider(CLIENT_ID, CLIENT_NAME);
-
-  emailLoginProvider.login(true)
+    })
     .catch(() => {
       t.fail();
       t.end();
@@ -100,7 +80,7 @@ test.cb('login() should should reject if email is not returned from the prompt',
     'request': t.context.request,
     './login-provider-base.js': t.context.loginProviderBase
   });
-  const emailLoginProvider = new EmailLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const emailLoginProvider = new EmailLoginProvider(CLIENT_ID);
 
   emailLoginProvider.login()
     .then(() => {
@@ -129,7 +109,7 @@ test.cb('login() request for passwordless start should use correct data and url'
     }),
     './login-provider-base.js': t.context.loginProviderBase
   });
-  const emailLoginProvider = new EmailLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const emailLoginProvider = new EmailLoginProvider(CLIENT_ID);
 
   emailLoginProvider.login()
     .catch(() => {
@@ -146,7 +126,7 @@ test.cb('login() should should reject if request returns an error', (t) => {
     }),
     './login-provider-base.js': t.context.loginProviderBase
   });
-  const emailLoginProvider = new EmailLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const emailLoginProvider = new EmailLoginProvider(CLIENT_ID);
 
   emailLoginProvider.login()
     .then(() => {
@@ -170,7 +150,7 @@ test.cb('login() should should reject if request returns an error in the body', 
     }),
     './login-provider-base.js': t.context.loginProviderBase
   });
-  const emailLoginProvider = new EmailLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const emailLoginProvider = new EmailLoginProvider(CLIENT_ID);
 
   emailLoginProvider.login()
     .then(() => {
@@ -178,7 +158,7 @@ test.cb('login() should should reject if request returns an error in the body', 
       t.end();
     })
     .catch(error => {
-      t.is(error, 'error code: test error message');
+      t.is(error, 'test error message');
       t.end();
     });
 });
@@ -194,7 +174,7 @@ test.cb('login() should should reject with custom message if request returns an 
     }),
     './login-provider-base.js': t.context.loginProviderBase
   });
-  const emailLoginProvider = new EmailLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const emailLoginProvider = new EmailLoginProvider(CLIENT_ID);
 
   emailLoginProvider.login()
     .then(() => {
@@ -219,7 +199,7 @@ test.cb('login() loginProviderBase should contain email from prompt and connecti
       return Promise.resolve(JWT);
     })
   });
-  const emailLoginProvider = new EmailLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const emailLoginProvider = new EmailLoginProvider(CLIENT_ID);
 
   emailLoginProvider.login()
     .catch(() => {
@@ -236,7 +216,7 @@ test.cb('login() should should reject if loginProviderBase returns an error', (t
       return Promise.reject('Test error message');
     })
   });
-  const emailLoginProvider = new EmailLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const emailLoginProvider = new EmailLoginProvider(CLIENT_ID);
 
   emailLoginProvider.login()
     .then(() => {

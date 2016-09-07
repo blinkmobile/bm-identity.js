@@ -12,7 +12,6 @@ const TEST_SUBJECT = '../../lib/login-providers/browser.js';
 const constants = require('../../lib/constants.js');
 
 const CLIENT_ID = 'valid client id';
-const CLIENT_NAME = 'valid client name';
 const JWT = 'valid jwt';
 const CODE = 'abc123';
 const VERIFIER_CHALLENGE = 'verifier challenge';
@@ -54,7 +53,7 @@ test.cb('login() should return valid jwt', (t) => {
     'base64url': t.context.base64url,
     './login-provider-base.js': t.context.loginProviderBase
   });
-  const browserLoginProvider = new BrowserLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const browserLoginProvider = new BrowserLoginProvider(CLIENT_ID);
 
   browserLoginProvider.login()
     .then((jwt) => {
@@ -88,7 +87,7 @@ test.cb('login() should call opn with correct data in url', (t) => {
     'base64url': t.context.base64url,
     './login-provider-base.js': t.context.loginProviderBase
   });
-  const browserLoginProvider = new BrowserLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const browserLoginProvider = new BrowserLoginProvider(CLIENT_ID);
 
   browserLoginProvider.login()
     .catch((error) => {
@@ -105,7 +104,7 @@ test.cb('login() should log a message to the console', (t) => {
     'base64url': t.context.base64url,
     './login-provider-base.js': t.context.loginProviderBase
   });
-  const browserLoginProvider = new BrowserLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const browserLoginProvider = new BrowserLoginProvider(CLIENT_ID);
 
   console.log = function (content) {
     t.is(content, 'A browser has been opened to allow you to login. Once logged in, you will be granted a verification code.');
@@ -140,7 +139,7 @@ test.cb('login() should prompt with the correct question', (t) => {
     'base64url': t.context.base64url,
     './login-provider-base.js': t.context.loginProviderBase
   });
-  const browserLoginProvider = new BrowserLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const browserLoginProvider = new BrowserLoginProvider(CLIENT_ID);
 
   browserLoginProvider.login()
     .catch((error) => {
@@ -168,7 +167,7 @@ test.cb('login() should make request with the correct url and data', (t) => {
     'base64url': t.context.base64url,
     './login-provider-base.js': t.context.loginProviderBase
   });
-  const browserLoginProvider = new BrowserLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const browserLoginProvider = new BrowserLoginProvider(CLIENT_ID);
 
   browserLoginProvider.login()
     .catch((error) => {
@@ -187,7 +186,7 @@ test.cb('login() should should reject if request returns an error', (t) => {
     'base64url': t.context.base64url,
     './login-provider-base.js': t.context.loginProviderBase
   });
-  const browserLoginProvider = new BrowserLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const browserLoginProvider = new BrowserLoginProvider(CLIENT_ID);
 
   browserLoginProvider.login()
     .then(() => {
@@ -213,7 +212,7 @@ test.cb('login() should should reject if request returns an error in the body', 
     'base64url': t.context.base64url,
     './login-provider-base.js': t.context.loginProviderBase
   });
-  const browserLoginProvider = new BrowserLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const browserLoginProvider = new BrowserLoginProvider(CLIENT_ID);
 
   browserLoginProvider.login()
     .then(() => {
@@ -221,7 +220,7 @@ test.cb('login() should should reject if request returns an error in the body', 
       t.end();
     })
     .catch(error => {
-      t.is(error, 'error code: test error message');
+      t.is(error, 'test error message');
       t.end();
     });
 });
