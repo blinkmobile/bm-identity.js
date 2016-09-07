@@ -89,7 +89,7 @@ test.cb('getByJWT() should reject if a jwt is not truthy', (t) => {
       t.end();
     })
     .catch((error) => {
-      t.is('Unauthenicated, please use the login command to login.', error);
+      t.is('Unauthenicated, please login before using this service.', error);
       t.end();
     });
 });

@@ -9,7 +9,6 @@ const inquirerMock = require('../helpers/inquirer.js');
 const TEST_SUBJECT = '../../lib/login-providers/username.js';
 
 const CLIENT_ID = 'valid client id';
-const CLIENT_NAME = 'valid client name';
 const JWT = 'valid jwt';
 const USERNAME = 'username';
 const PASSWORD = 'password';
@@ -27,7 +26,7 @@ test.cb('login() should return valid jwt', (t) => {
     'inquirer': t.context.inquirer,
     './login-provider-base.js': t.context.loginProviderBase
   });
-  const usernameLoginProvider = new UsernameLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const usernameLoginProvider = new UsernameLoginProvider(CLIENT_ID);
 
   usernameLoginProvider.login(USERNAME, PASSWORD)
     .then((jwt) => {
@@ -41,11 +40,12 @@ test.cb('login() should return valid jwt', (t) => {
 });
 
 test.cb('login() should ask for username and password if username and password is not passed in', (t) => {
+  t.plan(3);
   const UsernameLoginProvider = proxyquire(TEST_SUBJECT, {
     'inquirer': inquirerMock((questions) => {
       t.truthy(questions.find(question => question.name === 'username'));
       t.truthy(questions.find(question => question.name === 'password'));
-      t.end();
+      t.is(questions.length, 2);
       return Promise.resolve(questions.reduce((memo, question) => {
         memo[question.name] = question.name;
         return memo;
@@ -53,31 +53,12 @@ test.cb('login() should ask for username and password if username and password i
     }),
     './login-provider-base.js': t.context.loginProviderBase
   });
-  const usernameLoginProvider = new UsernameLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const usernameLoginProvider = new UsernameLoginProvider(CLIENT_ID);
 
   usernameLoginProvider.login()
-    .catch(() => {
-      t.fail();
+    .then(() => {
       t.end();
-    });
-});
-
-test.cb('login() should prompt for username and password if username and password is not passed in as a string', (t) => {
-  const UsernameLoginProvider = proxyquire(TEST_SUBJECT, {
-    'inquirer': inquirerMock((questions) => {
-      t.truthy(questions.find(question => question.name === 'username'));
-      t.truthy(questions.find(question => question.name === 'password'));
-      t.end();
-      return Promise.resolve(questions.reduce((memo, question) => {
-        memo[question.name] = question.name;
-        return memo;
-      }, {}));
-    }),
-    './login-provider-base.js': t.context.loginProviderBase
-  });
-  const usernameLoginProvider = new UsernameLoginProvider(CLIENT_ID, CLIENT_NAME);
-
-  usernameLoginProvider.login(true, true)
+    })
     .catch(() => {
       t.fail();
       t.end();
@@ -91,7 +72,7 @@ test.cb('login() should should reject if username is not returned from the promp
     }),
     './login-provider-base.js': t.context.loginProviderBase
   });
-  const usernameLoginProvider = new UsernameLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const usernameLoginProvider = new UsernameLoginProvider(CLIENT_ID);
 
   usernameLoginProvider.login()
     .then(() => {
@@ -113,7 +94,7 @@ test.cb('login() should should reject if password is not returned from the promp
     }),
     './login-provider-base.js': t.context.loginProviderBase
   });
-  const usernameLoginProvider = new UsernameLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const usernameLoginProvider = new UsernameLoginProvider(CLIENT_ID);
 
   usernameLoginProvider.login()
     .then(() => {
@@ -142,7 +123,7 @@ test.cb('login() loginProviderBase should contain username and password from pro
       return Promise.resolve(JWT);
     })
   });
-  const usernameLoginProvider = new UsernameLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const usernameLoginProvider = new UsernameLoginProvider(CLIENT_ID);
 
   usernameLoginProvider.login()
     .catch(() => {
@@ -158,7 +139,7 @@ test.cb('login() should should reject if loginProviderBase returns an error', (t
       return Promise.reject('Test error message');
     })
   });
-  const usernameLoginProvider = new UsernameLoginProvider(CLIENT_ID, CLIENT_NAME);
+  const usernameLoginProvider = new UsernameLoginProvider(CLIENT_ID);
 
   usernameLoginProvider.login()
     .then(() => {

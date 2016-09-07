@@ -1,10 +1,9 @@
 'use strict';
 
 const assumeRole = require('./lib/aws/assume-role.js');
-const loginCommand = require('./lib/commands/login.js');
 const loginCommon = require('./lib/common/login.js');
-const logoutCommand = require('./lib/commands/logout.js');
 const logoutCommon = require('./lib/common/logout.js');
+const tenant = require('./lib/common/tenant.js');
 const profile = require('./lib/auth0/profile.js');
 
 const privateVars = new WeakMap();
@@ -19,26 +18,8 @@ class BlinkMobileIdentity {
    */
   constructor (clientName) {
     privateVars.set(this, {
-      clientName,
-      commands: {
-        login: loginCommand(clientName),
-        logout: logoutCommand(clientName)
-      }
+      clientName
     });
-  }
-
-  /**
-   * Get the the login command to extend an existing CLI.
-   */
-  get loginCommand () {
-    return privateVars.get(this).commands.login;
-  }
-
-  /**
-   * Get the the logout command to extend an existing CLI.
-   */
-  get logoutCommand () {
-    return privateVars.get(this).commands.logout;
   }
 
   /**
@@ -72,6 +53,30 @@ class BlinkMobileIdentity {
    */
   getProfile () {
     return profile.getByClient(privateVars.get(this).clientName);
+  }
+
+  /**
+   * Show the currently set and available tenants.
+   * @param {String} clientName - The name of a Client.
+   */
+  getTenants () {
+    return tenant.get();
+  }
+
+  /**
+   * Change the currently set tenant, will then show the currently set and available tenants.
+   * @param {String} tenantName - The name of a tenant to set.
+   */
+  setTenant (tenantName) {
+    return tenant.set(tenantName);
+  }
+
+  /**
+   * Remove a tenant from the available tenants, will then show the currently set and available tenants.
+   * @param {String} tenantName - The name of a tenant to remove.
+   */
+  removeTenant (tenantName) {
+    return tenant.remove(tenantName);
   }
 }
 
