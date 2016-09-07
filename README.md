@@ -5,24 +5,18 @@ Provides easy management of authenication for our CLI via a single identity.
 ## Getting Started
 
 ```sh
-npm install @blinkmobile/bm-identity.js --save
+npm install @blinkmobile/bm-identity --save
 ```
 
 ```js
 const pkg = require('./package.json');
-const BlinkMobileIdentity = require('@blinkmobile/bm-identity.js');
+const BlinkMobileIdentity = require('@blinkmobile/bm-identity');
 const blinkMobileIdentity = new BlinkMobileIdentity(pkg.name);
 ```
 
 ## Usage
 
-`BlinkMobileIdentity` can be used for two purposes
-
-### 1. Internal Use
-
-Functions for the following:
-
-#### login
+### Login
 
 If no LoginOptions are passed, a browser based login process will start. This is how users can login using a social account e.g. Google.
 
@@ -46,7 +40,7 @@ blinkMobileIdentity.login()
   });
 ```
 
-#### Logout
+### Logout
 
 ```js
 logout () => Promise
@@ -56,10 +50,10 @@ logout () => Promise
 blinkMobileIdentity.logout();
 ```
 
-#### Assume AWS Role
+### Assume AWS Role
 
 ```js
-assumeAWSRole (additionalParameters: object) => Promise{AssumedRoleCredentials}
+assumeAWSRole (additionalParameters: Object) => Promise{AssumedRoleCredentials}
 ```
 
 ```js
@@ -70,39 +64,64 @@ interface AssumedRoleCredentials {
 }
 ```
 
-#### Get Profile
+```js
+blinkMobileIdentity.assumeAWSRole()
+  .then(credentials => {
+    // Use AWS credentials
+  });
+```
+
+### Get Profile
 
 ```js
 getProfile () => Promise{Auth0Profile}
 ```
 
+```js
+blinkMobileIdentity.getProfile()
+  .then(profile => {
+    // Use Auth0 profile
+  });
+```
+
 See [Auth0 Profile Structure](https://auth0.com/docs/user-profile/user-profile-structure) for available properties. 
 
-### 2. Extend Existing CLI
+### Manage Tenants
 
-Extending an existing CLI with login and logout commands will allow for these commands to be used from the command line
+Get and set the current tenant. Also get and remove list of previously used tenants.
 
-The login and logout commands internally call the login and logout functions from `BlinkMobileIdentity`
-
-#### Useage
-
-```
-login                       => start the login process, if no flags are passed, a browser based login will begin
-  --username <username>     => username to login with, if password is not specified, you will be prompted for it
-  --password <password>	    => password to login with, requires the username flag as well
-  --email <email>           => email address to send code to for passwordless authentication
-  --sms <phone>             => phone number to send code to for passwordless authentication
-
-logout                      => logout of the service being extended
+```js
+getTenants () => Promise{Tenants}
 ```
 
-#### Examples
-
+```js
+setTenant (tenantName: String) => Promise{Tenants}
 ```
-bm service login --username                     => Start a username and password login process which will prompt for both
-bm service login --username email@provider.com  => Start a username and password login process which will prompt for password only
-bm service login --email                        => Start a passwordless email login process which will prompt for an email address
-bm service login --sms +61412345678             => Start a passwordless sms login process
-bm service login                                => Start a browser based login process.
-bm service logout                               => Start the logout process.
+
+```js
+removeTenant (tenantName: String) => Promise{Tenants}
+```
+
+```js
+interface Tenants {
+  current : String,
+  previous : Array{String}
+}
+```
+
+```js
+blinkMobileIdentity.getTenants()
+  .then(tenants => {
+    // Use tenants
+  });
+
+blinkMobileIdentity.setTenant('TenantName')
+  .then(tenants => {
+    // Tenant was set
+  });
+
+blinkMobileIdentity.removeTenant('TenantName')
+  .then(tenants => {
+    // Tenant was removed
+  });
 ```
