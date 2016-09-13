@@ -2,6 +2,8 @@
 
 ## Next
 
+## 2.1.0 - 2016-09-13
+
 ### Fixed
 
 - AUTH-9: Fixed issues with Node 4 support
