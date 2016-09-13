@@ -12,6 +12,10 @@
   - Access tokens issued after a successful login will now be exchanged for new access tokens when they are used.
   - An access token will only be exchanged if it is close to expiring.
 
+### Changed
+
+- AUTH-8: Error handling to use `Error`s instead of string literals.
+
 ## 2.0.0 - 2016-09-08
 
 ### Added
