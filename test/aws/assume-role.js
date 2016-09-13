@@ -38,6 +38,10 @@ test.beforeEach((t) => {
     return Promise.resolve(JWT);
   };
 
+  t.context.verifyJWT = (jwt, clientId) => {
+    return Promise.resolve(jwt);
+  };
+
   t.context.auth0ClientFactory = auth0ClientFactoryMock(() => {
     return Promise.resolve(CLIENT_ID);
   });
@@ -52,6 +56,7 @@ test.cb('assumeRole() should return valid aws credentials', (t) => {
     'request': t.context.request,
     '../auth0/client-factory.js': t.context.auth0ClientFactory,
     '../utils/get-jwt.js': t.context.getJWT,
+    '../auth0/verify-jwt.js': t.context.verifyJWT,
     '../common/tenant.js': t.context.tenant
   });
 
@@ -79,6 +84,7 @@ test.cb('assumeRole() should call getJwt() to get access token with clientName',
       t.end();
       return Promise.resolve(JWT);
     },
+    '../auth0/verify-jwt.js': t.context.verifyJWT,
     '../common/tenant.js': t.context.tenant
   });
 
@@ -98,6 +104,7 @@ test.cb('assumeRole() should call getClientIdByName() to get client id with clie
       return Promise.resolve(CLIENT_ID);
     }),
     '../utils/get-jwt.js': t.context.getJWT,
+    '../auth0/verify-jwt.js': t.context.verifyJWT,
     '../common/tenant.js': t.context.tenant
   });
 
@@ -113,6 +120,7 @@ test.cb('assumeRole() should call tenant.get() to get current tenant', (t) => {
     'request': t.context.request,
     '../auth0/client-factory.js': t.context.auth0ClientFactory,
     '../utils/get-jwt.js': t.context.getJWT,
+    '../auth0/verify-jwt.js': t.context.verifyJWT,
     '../common/tenant.js': {
       get: () => {
         t.pass();
@@ -129,23 +137,23 @@ test.cb('assumeRole() should call tenant.get() to get current tenant', (t) => {
     });
 });
 
-test.cb('assumeRole() should reject if a jwt is not found from getJwt()', (t) => {
+test.cb('assumeRole() should call verifyJWT() to ensure jwt is valid', (t) => {
   const assumeRole = proxyquire(TEST_SUBJECT, {
     'request': t.context.request,
     '../auth0/client-factory.js': t.context.auth0ClientFactory,
-    '../utils/get-jwt.js': (clientName) => {
-      return Promise.resolve();
+    '../utils/get-jwt.js': t.context.getJWT,
+    '../auth0/verify-jwt.js': (jwt, clientId) => {
+      t.is(jwt, JWT);
+      t.is(clientId, CLIENT_ID);
+      t.end();
+      return Promise.resolve(jwt);
     },
     '../common/tenant.js': t.context.tenant
   });
 
   assumeRole(CLIENT_NAME)
-    .then(() => {
-      t.fail();
-      t.end();
-    })
     .catch((error) => {
-      t.is('Unauthenticated, please login before using this service.', error);
+      t.fail(error);
       t.end();
     });
 });
@@ -169,6 +177,7 @@ test.cb('assumeRole() should call request with the correct data and additional p
     }),
     '../auth0/client-factory.js': t.context.auth0ClientFactory,
     '../utils/get-jwt.js': t.context.getJWT,
+    '../auth0/verify-jwt.js': t.context.verifyJWT,
     '../common/tenant.js': t.context.tenant
   });
 
@@ -186,6 +195,7 @@ test.cb('assumeRole() should reject if request returns an error', (t) => {
     }),
     '../auth0/client-factory.js': t.context.auth0ClientFactory,
     '../utils/get-jwt.js': t.context.getJWT,
+    '../auth0/verify-jwt.js': t.context.verifyJWT,
     '../common/tenant.js': t.context.tenant
   });
 
@@ -210,6 +220,7 @@ test.cb('assumeRole() should should reject with error if request returns an erro
     }),
     '../auth0/client-factory.js': t.context.auth0ClientFactory,
     '../utils/get-jwt.js': t.context.getJWT,
+    '../auth0/verify-jwt.js': t.context.verifyJWT,
     '../common/tenant.js': t.context.tenant
   });
 
@@ -219,7 +230,7 @@ test.cb('assumeRole() should should reject with error if request returns an erro
       t.end();
     })
     .catch((error) => {
-      t.is(error, 'test error message');
+      t.deepEqual(error, new Error('test error message'));
       t.end();
     });
 });
@@ -234,6 +245,7 @@ test.cb('assumeRole() should should reject with custom message if request return
     }),
     '../auth0/client-factory.js': t.context.auth0ClientFactory,
     '../utils/get-jwt.js': t.context.getJWT,
+    '../auth0/verify-jwt.js': t.context.verifyJWT,
     '../common/tenant.js': t.context.tenant
   });
 
@@ -243,7 +255,7 @@ test.cb('assumeRole() should should reject with custom message if request return
       t.end();
     })
     .catch((error) => {
-      t.is(error, 'Unauthorised, your access token has expired. Please login again.');
+      t.deepEqual(error, new Error('Unauthorised, your access token has expired. Please login again.'));
       t.end();
     });
 });

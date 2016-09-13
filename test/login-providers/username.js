@@ -80,7 +80,7 @@ test.cb('login() should should reject if username is not returned from the promp
       t.end();
     })
     .catch(error => {
-      t.is(error, 'Please specify a username.');
+      t.deepEqual(error, new Error('Please specify a username.'));
       t.end();
     });
 });
@@ -102,7 +102,7 @@ test.cb('login() should should reject if password is not returned from the promp
       t.end();
     })
     .catch(error => {
-      t.is(error, 'Please specify a password.');
+      t.deepEqual(error, new Error('Please specify a password.'));
       t.end();
     });
 });
@@ -147,7 +147,7 @@ test.cb('login() should should reject if loginProviderBase returns an error', (t
       t.end();
     })
     .catch(error => {
-      t.is(error, 'Test error message');
+      t.deepEqual(error, 'Test error message');
       t.end();
     });
 });

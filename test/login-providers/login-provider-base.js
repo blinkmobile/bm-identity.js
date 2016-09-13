@@ -85,7 +85,7 @@ test.cb('requestJWT() request for jwt should use correct data and url', (t) => {
         password: PASSWORD,
         client_id: CLIENT_ID,
         grant_type: 'password',
-        scope: 'openid'
+        scope: 'openid refreshIdTokenBeforeSeconds'
       });
       t.end();
       callback(null, {}, {});
@@ -141,7 +141,7 @@ test.cb('requestJWT() should reject if request returns an bad connection error i
       t.end();
     })
     .catch(error => {
-      t.is(error, 'test error message');
+      t.deepEqual(error, new Error('test error message'));
       t.end();
     });
 });
@@ -167,8 +167,7 @@ test.cb('promptForCode() should prompt with the messge passed in', (t) => {
 
   loginProviderBase.promptForCode(MESSAGE, USERNAME, CONNECTION)
     .catch((error) => {
-      console.log(error);
-      t.fail();
+      t.fail(error);
       t.end();
     });
 });
@@ -191,7 +190,7 @@ test.cb('promptForCode() should reject if prompt does not return code', (t) => {
       t.end();
     })
     .catch(error => {
-      t.is(error, 'Verification code was not specified.');
+      t.deepEqual(error, new Error('Verification code was not specified.'));
       t.end();
     });
 });
