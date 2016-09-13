@@ -13,10 +13,8 @@ const constants = require('../../lib/constants.js');
 const JWT = 'a valid jwt';
 const CLIENT_ID = 'valid client id';
 const DECODED = {
-  exp: Date.now() / 1000 + 43200 // 12 hours after tests are run
-};
-const AUTH0_CONFIGURATION = {
-  refreshJWTBeforeSeconds: 86400 // 24 hours
+  exp: Date.now() / 1000 + 43200, // 12 hours after tests are run
+  refreshIdTokenBeforeSeconds: 86400 // 24 hours
 };
 const DATA = {
   id_token: JWT
@@ -33,10 +31,6 @@ test.beforeEach((t) => {
       'jsonwebtoken': jsonwebtokenMock((jwt) => {
         return DECODED;
       }),
-
-      './configuration.js': () => {
-        return Promise.resolve(AUTH0_CONFIGURATION);
-      },
 
       '../utils/user-config.js': userConfigStoreMock(null, (updateFn) => {
         return Promise.resolve(updateFn({}));
