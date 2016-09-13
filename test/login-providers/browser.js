@@ -220,7 +220,7 @@ test.cb('login() should should reject if request returns an error in the body', 
       t.end();
     })
     .catch(error => {
-      t.is(error, 'test error message');
+      t.deepEqual(error, new Error('test error message'));
       t.end();
     });
 });

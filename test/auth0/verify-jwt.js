@@ -60,7 +60,7 @@ test('verifyJWT() should reject if a jwt is not passed in', (t) => {
 
   return verifyJWT(null, CLIENT_ID)
     .catch((error) => {
-      t.is(error, 'Unauthenticated, please login before using this service.');
+      t.deepEqual(error, new Error('Unauthenticated, please login before using this service.'));
     });
 });
 
@@ -86,7 +86,7 @@ test('verifyJWT() should reject if decode() does not return an object with an ex
 
   return verifyJWT(JWT, CLIENT_ID)
     .catch((error) => {
-      t.is(error, 'Malformed access token. Please login again.');
+      t.deepEqual(error, new Error('Malformed access token. Please login again.'));
     });
 });
 
@@ -102,7 +102,7 @@ test('verifyJWT() should reject if jwt is expired', (t) => {
 
   return verifyJWT(JWT, CLIENT_ID)
     .catch((error) => {
-      t.is(error, 'Unauthorised, your access token has expired. Please login again.');
+      t.deepEqual(error, new Error('Unauthorised, your access token has expired. Please login again.'));
     });
 });
 
@@ -152,7 +152,7 @@ test('verifyJWT() should reject if request.post() returns an error in the body',
 
   return verifyJWT(JWT, CLIENT_ID)
     .catch((error) => {
-      t.is(error, 'test error message');
+      t.deepEqual(error, new Error('test error message'));
     });
 });
 

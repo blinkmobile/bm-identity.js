@@ -84,7 +84,7 @@ test.cb('login() should should reject if phone number is not returned from the p
 
   smsLoginProvider.login()
     .catch(error => {
-      t.is(error, 'Please specify a phone number to send verification code to.');
+      t.deepEqual(error, new Error('Please specify a phone number to send verification code to.'));
       t.end();
     });
 });
@@ -153,7 +153,7 @@ test.cb('login() should should reject if request returns an error in the body', 
       t.end();
     })
     .catch(error => {
-      t.is(error, 'test error message');
+      t.deepEqual(error, new Error('test error message'));
       t.end();
     });
 });
@@ -177,7 +177,7 @@ test.cb('login() should should reject with custom message if request returns an 
       t.end();
     })
     .catch(error => {
-      t.is(error, 'This BlinkMobile service does not provide SMS driven passwordless authentication. Please use another type of authentication to login.');
+      t.deepEqual(error, new Error('This BlinkMobile service does not provide SMS driven passwordless authentication. Please use another type of authentication to login.'));
       t.end();
     });
 });
@@ -219,7 +219,7 @@ test.cb('login() should should reject if loginProviderBase returns an error', (t
       t.end();
     })
     .catch(error => {
-      t.is(error, 'Test error message');
+      t.deepEqual(error, 'Test error message');
       t.end();
     });
 });

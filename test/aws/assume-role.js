@@ -230,7 +230,7 @@ test.cb('assumeRole() should should reject with error if request returns an erro
       t.end();
     })
     .catch((error) => {
-      t.is(error, 'test error message');
+      t.deepEqual(error, new Error('test error message'));
       t.end();
     });
 });
@@ -255,7 +255,7 @@ test.cb('assumeRole() should should reject with custom message if request return
       t.end();
     })
     .catch((error) => {
-      t.is(error, 'Unauthorised, your access token has expired. Please login again.');
+      t.deepEqual(error, new Error('Unauthorised, your access token has expired. Please login again.'));
       t.end();
     });
 });
