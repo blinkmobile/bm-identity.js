@@ -1,6 +1,10 @@
 # Change Log
 
-## Next
+## Unreleased
+
+### Added
+
+- AUTH-14: Ability to get access token stored after a succesful login.
 
 ## 2.1.0 - 2016-09-13
 

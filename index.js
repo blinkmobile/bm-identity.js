@@ -5,6 +5,7 @@ const loginCommon = require('./lib/common/login.js');
 const logoutCommon = require('./lib/common/logout.js');
 const tenant = require('./lib/common/tenant.js');
 const profile = require('./lib/auth0/profile.js');
+const getJWT = require('./lib/utils/get-jwt.js');
 
 const privateVars = new WeakMap();
 
@@ -53,6 +54,15 @@ class BlinkMobileIdentity {
    */
   getProfile () {
     return profile.getByClient(privateVars.get(this).clientName);
+  }
+
+  /**
+   * Get access token generated after a successful login
+   * @function getAccessToken
+   * @returns {String} The access token generated after a successful login.
+   */
+  getAccessToken () {
+    return getJWT();
   }
 
   /**
