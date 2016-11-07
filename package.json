@@ -41,17 +41,17 @@
     "request": "^2.74.0"
   },
   "devDependencies": {
-    "ava": "^0.15.2",
+    "ava": "^0.16.0",
     "eslint": "^3.3.1",
-    "eslint-config-semistandard": "^6.0.2",
-    "eslint-config-standard": "^5.3.5",
-    "eslint-plugin-promise": "^2.0.1",
+    "eslint-config-semistandard": "^7.0.0",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-plugin-promise": "^3.3.1",
     "eslint-plugin-standard": "^2.0.0",
     "fixpack": "^2.3.1",
-    "flow-bin": "^0.30.0",
+    "flow-bin": "^0.34.0",
     "jsdoc": "^3.4.0",
-    "mockery": "^1.4.1",
-    "npm-run-all": "^2.2.2",
+    "mockery": "^2.0.0",
+    "npm-run-all": "^3.1.1",
     "proxyquire": "^1.7.10",
     "yauzl": "^2.6.0"
   }
