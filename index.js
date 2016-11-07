@@ -50,10 +50,15 @@ class BlinkMobileIdentity {
 
   /**
    * Get the Auth0 profile for the current user.
+   * @param {String} [accessToken] - The access token generated after a successful login. If not passed, will attempt to get the access token from the file system.
    * @returns {Object} The Auth0 profile.
    */
-  getProfile () {
-    return profile.getByClient(privateVars.get(this).clientName);
+  getProfile (accessToken) {
+    if (accessToken) {
+      return profile.getByJWT(accessToken);
+    } else {
+      return profile.getByClient(privateVars.get(this).clientName);
+    }
   }
 
   /**

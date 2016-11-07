@@ -73,8 +73,10 @@ blinkMobileIdentity.assumeAWSRole()
 
 ### Get Profile
 
+If `accessToken` is not passed, will attempt to get the access token from the file system.
+
 ```js
-getProfile () => Promise{Auth0Profile}
+getProfile (accessToken: String | undefined) => Promise{Auth0Profile}
 ```
 
 ```js
