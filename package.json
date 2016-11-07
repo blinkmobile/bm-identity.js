@@ -10,7 +10,8 @@
     "fixpack": "fixpack",
     "lint": "eslint .",
     "make-docs": "jsdoc index.js ./lib -r -d ./jsdocs",
-    "test": "npm-run-all lint ava"
+    "test": "npm-run-all lint ava",
+    "postpublish": "greenkeeper-postpublish"
   },
   "repository": {
     "type": "git",
@@ -49,6 +50,7 @@
     "eslint-plugin-standard": "^2.0.0",
     "fixpack": "^2.3.1",
     "flow-bin": "^0.30.0",
+    "greenkeeper-postpublish": "^1.0.1",
     "jsdoc": "^3.4.0",
     "mockery": "^1.4.1",
     "npm-run-all": "^2.2.2",
