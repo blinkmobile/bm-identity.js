@@ -8,6 +8,8 @@
 
 - AUTH-14: Ability to get Auth0 profile using an access token.
 
+- AUTH-14: Ability to get settings scoped to a BlinkMobile service.
+
 ## 2.1.0 - 2016-09-13
 
 ### Fixed

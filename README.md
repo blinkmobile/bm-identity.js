@@ -97,6 +97,17 @@ blinkMobileIdentity.getAccessToken()
   });
 ```
 
+```js
+getServiceSettings () => Promise{Object}
+```
+
+```js
+blinkMobileIdentity.getServiceSettings()
+  .then(serviceSettings => {
+    // Use service settings
+  });
+```
+
 See [Auth0 Profile Structure](https://auth0.com/docs/user-profile/user-profile-structure) for available properties.
 
 ### Manage Tenants
