@@ -10,6 +10,10 @@
 
 - AUTH-14: Ability to get settings scoped to a BlinkMobile service.
 
+### Changed
+
+- AUTH-14: Updated all dependencies.
+
 ## 2.1.0 - 2016-09-13
 
 ### Fixed

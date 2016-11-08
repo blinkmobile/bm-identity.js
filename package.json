@@ -6,7 +6,7 @@
   "scripts": {
     "ava": "ava",
     "eslint": "eslint --fix --cache .",
-    "flow_check": "flow check || exit 0",
+    "flow_check": "flow check",
     "fixpack": "fixpack",
     "lint": "eslint .",
     "make-docs": "jsdoc index.js ./lib -r -d ./jsdocs",
@@ -33,28 +33,30 @@
   },
   "dependencies": {
     "@blinkmobile/blinkmrc": "1.1.0",
+    "aws-sdk": "2.6.15",
+    "base64url": "2.0.0",
+    "inquirer": "1.2.2",
     "jsonwebtoken": "7.1.9",
-    "aws-sdk": "^2.3.10",
-    "base64url": "^2.0.0",
-    "inquirer": "^1.0.3",
     "lodash.memoize": "4.1.2",
-    "opn": "^4.0.2",
-    "request": "^2.74.0"
+    "opn": "4.0.2",
+    "request": "2.78.0"
   },
   "devDependencies": {
-    "ava": "^0.15.2",
-    "eslint": "^3.3.1",
-    "eslint-config-semistandard": "^6.0.2",
-    "eslint-config-standard": "^5.3.5",
-    "eslint-plugin-promise": "^2.0.1",
-    "eslint-plugin-standard": "^2.0.0",
+    "ava": "^0.16.0",
+    "eslint": "^3.9.1",
+    "eslint-config-semistandard": "^7.0.0",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-plugin-node": "^3.0.3",
+    "eslint-plugin-promise": "^3.3.1",
+    "eslint-plugin-standard": "^2.0.1",
     "fixpack": "^2.3.1",
-    "flow-bin": "^0.30.0",
+    "flow-bin": "^0.34.0",
     "greenkeeper-postpublish": "^1.0.1",
-    "jsdoc": "^3.4.0",
-    "mockery": "^1.4.1",
-    "npm-run-all": "^2.2.2",
-    "proxyquire": "^1.7.10",
-    "yauzl": "^2.6.0"
+    "jsdoc": "^3.4.2",
+    "npm-run-all": "^3.1.1",
+    "proxyquire": "^1.7.10"
+  },
+  "directories": {
+    "test": "test"
   }
 }
