@@ -1,6 +1,18 @@
 # Change Log
 
-## Next
+## Unreleased
+
+### Added
+
+- AUTH-14: Ability to get access token stored after a successful login.
+
+- AUTH-14: Ability to get Auth0 profile using an access token.
+
+- AUTH-14: Ability to get settings scoped to a BlinkMobile service.
+
+### Changed
+
+- AUTH-14: Updated all dependencies.
 
 ## 2.1.0 - 2016-09-13
 

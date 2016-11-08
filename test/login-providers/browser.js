@@ -74,7 +74,7 @@ test.cb('login() should call opn with correct data in url', (t) => {
       t.is(url, constants.AUTH0_URL +
         '/authorize' +
         '?response_type=code' +
-        '&scope=openid%20refreshIdTokenBeforeSeconds' +
+        '&scope=openid refreshIdTokenBeforeSeconds serviceSettingsUrl' +
         '&client_id=' + CLIENT_ID +
         '&redirect_uri=' + constants.AUTH0_CALLBACK_URL +
         '&code_challenge=' + VERIFIER_CHALLENGE +

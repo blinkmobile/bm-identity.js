@@ -1,4 +1,4 @@
-# bm-identity.js [![npm](https://img.shields.io/npm/v/@blinkmobile/bm-identity.svg?maxAge=2592000)](https://www.npmjs.com/package/@blinkmobile/bm-identity) [![Travis CI Status](https://travis-ci.org/blinkmobile/bm-identity.js.svg?branch=master)](https://travis-ci.org/blinkmobile/bm-identity.js)
+# bm-identity.js [![npm](https://img.shields.io/npm/v/@blinkmobile/bm-identity.svg?maxAge=2592000)](https://www.npmjs.com/package/@blinkmobile/bm-identity) [![AppVeyor Status](https://img.shields.io/appveyor/ci/blinkmobile/bm-identity-js/master.svg)](https://ci.appveyor.com/project/blinkmobile/bm-identity-js) [![Travis CI Status](https://travis-ci.org/blinkmobile/bm-identity.js.svg?branch=master)](https://travis-ci.org/blinkmobile/bm-identity.js)
 
 Provides easy management of authenication for our CLI via a single identity.
 
@@ -73,8 +73,12 @@ blinkMobileIdentity.assumeAWSRole()
 
 ### Get Profile
 
+If `accessToken` is not passed, will attempt to get the access token from the file system.
+
+See [Auth0 Profile Structure](https://auth0.com/docs/user-profile/user-profile-structure) for available properties.
+
 ```js
-getProfile () => Promise{Auth0Profile}
+getProfile (accessToken: String | undefined) => Promise{Auth0Profile}
 ```
 
 ```js
@@ -84,7 +88,36 @@ blinkMobileIdentity.getProfile()
   });
 ```
 
-See [Auth0 Profile Structure](https://auth0.com/docs/user-profile/user-profile-structure) for available properties. 
+### Get Access Token
+
+To retrieve the access token stored after a successful login:
+
+```js
+getAccessToken () => Promise{string}
+```
+
+```js
+blinkMobileIdentity.getAccessToken()
+  .then(jwt => {
+    // Use access token
+  });
+```
+
+### Get Service Settings
+
+Service settings will be scoped to a specific BlinkMobile service.
+Properties may also be scoped to the user that requests them.
+
+```js
+getServiceSettings () => Promise{Object}
+```
+
+```js
+blinkMobileIdentity.getServiceSettings()
+  .then(serviceSettings => {
+    // Use service settings
+  });
+```
 
 ### Manage Tenants
 
