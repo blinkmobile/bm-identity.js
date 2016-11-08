@@ -75,6 +75,8 @@ blinkMobileIdentity.assumeAWSRole()
 
 If `accessToken` is not passed, will attempt to get the access token from the file system.
 
+See [Auth0 Profile Structure](https://auth0.com/docs/user-profile/user-profile-structure) for available properties.
+
 ```js
 getProfile (accessToken: String | undefined) => Promise{Auth0Profile}
 ```
@@ -85,6 +87,10 @@ blinkMobileIdentity.getProfile()
     // Use Auth0 profile
   });
 ```
+
+### Get Access Token
+
+To retrieve the access token stored after a successful login:
 
 ```js
 getAccessToken () => Promise{string}
@@ -97,6 +103,11 @@ blinkMobileIdentity.getAccessToken()
   });
 ```
 
+### Get Service Settings
+
+Service settings will be scoped to a specific BlinkMobile service.
+Properties may also be scoped to the user that requests them.
+
 ```js
 getServiceSettings () => Promise{Object}
 ```
@@ -107,8 +118,6 @@ blinkMobileIdentity.getServiceSettings()
     // Use service settings
   });
 ```
-
-See [Auth0 Profile Structure](https://auth0.com/docs/user-profile/user-profile-structure) for available properties.
 
 ### Manage Tenants
 

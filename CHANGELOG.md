@@ -4,7 +4,7 @@
 
 ### Added
 
-- AUTH-14: Ability to get access token stored after a succesful login.
+- AUTH-14: Ability to get access token stored after a successful login.
 
 - AUTH-14: Ability to get Auth0 profile using an access token.
 
