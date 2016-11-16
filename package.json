@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@blinkmobile/blinkmrc": "1.1.0",
-    "aws-sdk": "2.7.0",
+    "aws-sdk": "2.7.2",
     "base64url": "2.0.0",
     "inquirer": "1.2.3",
     "jsonwebtoken": "7.1.9",
