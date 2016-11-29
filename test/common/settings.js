@@ -11,6 +11,7 @@ const CLIENT_NAME = 'valid client name';
 const DATA = 'valid settings';
 const DECODED = { serviceSettingsUrl: 'valid https url' };
 const JWT = 'a valid jwt';
+const PROJECT = 'valid project name';
 
 test.beforeEach((t) => {
   t.context.getTestSubject = (overrides) => {
@@ -92,6 +93,22 @@ test('Should call request() with correct arguments', (t) => {
     }
   });
   return settings(CLIENT_NAME);
+});
+
+test('Should call request() with correct arguments for project', (t) => {
+  t.plan(1);
+  const settings = t.context.getTestSubject({
+    'request': (options, callback) => {
+      t.deepEqual(options, {
+        auth: { 'bearer': JWT },
+        json: true,
+        method: 'GET',
+        url: `${DECODED.serviceSettingsUrl}?bmService=${CLIENT_NAME}&bmProject=${PROJECT}`
+      });
+      callback(null, {statusCode: 200}, {});
+    }
+  });
+  return settings(CLIENT_NAME, PROJECT);
 });
 
 test('Should reject if request() returns an error', (t) => {
