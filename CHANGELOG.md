@@ -1,5 +1,11 @@
 # Change Log
 
+## Unreleased
+
+### Added
+
+- AUTH-15: Support for passing additional parameters when requesting service settings
+
 ## 2.2.0 - 2016-11-08
 
 ### Added

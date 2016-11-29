@@ -72,11 +72,11 @@ class BlinkMobileIdentity {
 
   /**
    * Get settings scoped to a BlinkMobile service.
-   * @param {String} bmProject - The name of a project to obtain settings for.
+   * @param {Object} additionalParameters - Additional parameters to pass to the settings endpoint.
    * @returns {Object} The settings.
    */
-  getServiceSettings (bmProject) {
-    return settings(privateVars.get(this).clientName, bmProject);
+  getServiceSettings (additionalParameters) {
+    return settings(privateVars.get(this).clientName, additionalParameters);
   }
 
   /**

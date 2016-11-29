@@ -7,11 +7,11 @@ const jsonwebtokenMock = require('../helpers/jsonwebtoken.js');
 
 const TEST_SUBJECT = '../../lib/common/settings.js';
 
-const CLIENT_NAME = 'valid client name';
+const CLIENT_NAME = 'validClientName';
 const DATA = 'valid settings';
 const DECODED = { serviceSettingsUrl: 'valid https url' };
 const JWT = 'a valid jwt';
-const PROJECT = 'valid project name';
+const PROJECT = 'validProjectName';
 
 test.beforeEach((t) => {
   t.context.getTestSubject = (overrides) => {
@@ -95,7 +95,7 @@ test('Should call request() with correct arguments', (t) => {
   return settings(CLIENT_NAME);
 });
 
-test('Should call request() with correct arguments for project', (t) => {
+test('Should call request() with correct arguments for additional parameters', (t) => {
   t.plan(1);
   const settings = t.context.getTestSubject({
     'request': (options, callback) => {
@@ -103,12 +103,12 @@ test('Should call request() with correct arguments for project', (t) => {
         auth: { 'bearer': JWT },
         json: true,
         method: 'GET',
-        url: `${DECODED.serviceSettingsUrl}?bmService=${CLIENT_NAME}&bmProject=${PROJECT}`
+        url: `${DECODED.serviceSettingsUrl}?bmProject=${PROJECT}&bmService=${CLIENT_NAME}`
       });
       callback(null, {statusCode: 200}, {});
     }
   });
-  return settings(CLIENT_NAME, PROJECT);
+  return settings(CLIENT_NAME, {bmProject: PROJECT});
 });
 
 test('Should reject if request() returns an error', (t) => {

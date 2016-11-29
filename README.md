@@ -106,10 +106,10 @@ blinkMobileIdentity.getAccessToken()
 ### Get Service Settings
 
 Service settings will be scoped to a specific BlinkMobile service.
-Properties may also be scoped to a project and/or user that requests them.
+Properties may also be scoped to a project and/or the user that requests them.
 
 ```js
-getServiceSettings (bmProject: String | void) => Promise{Object}
+getServiceSettings (additionalParameters: Object) => Promise{Object}
 ```
 
 ```js
