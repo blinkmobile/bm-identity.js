@@ -1,10 +1,21 @@
 # Change Log
 
-## Unreleased
+## 2.3.0
 
 ### Added
 
 - AUTH-15: Support for passing additional parameters when requesting service settings
+
+### dependencies
+
+- `aws-sdk`: `2.6.15` -> `2.7.9`
+- `inquirer`: `1.2.2` -> `1.2.3`
+- `request`: `2.78.0` -> `2.79.0`
+
+### devDependencies
+
+- `eslint`: `^3.9.1` -> `^3.11.1`
+- `flow-bin`: `^0.34.0` -> `^0.35.0`
 
 ## 2.2.0 - 2016-11-08
 
