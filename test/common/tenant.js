@@ -142,20 +142,12 @@ test.cb('set() should call userConfigStore.update() and should not add tenant to
     });
 });
 
-test.cb('remove() should reject with error if no tenant name is passed in', (t) => {
+test('remove() should reject with error if no tenant name is passed in', (t) => {
   const tenant = proxyquire(TEST_SUBJECT, {
     '../utils/user-config.js': t.context.userConfigStore
   });
 
-  tenant.set()
-    .then(() => {
-      t.fail();
-      t.end();
-    })
-    .catch((error) => {
-      t.deepEqual(error, new Error('Must specify a tenant to remove'));
-      t.end();
-    });
+  t.throws(tenant.remove(), 'Must specify a tenant to remove');
 });
 
 test.cb('remove() should call userConfigStore.update() to remove the tenant name passed in to current', (t) => {

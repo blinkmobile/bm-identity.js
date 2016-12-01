@@ -64,7 +64,6 @@ class BlinkMobileIdentity {
 
   /**
    * Get access token generated after a successful login
-   * @function getAccessToken
    * @returns {String} The access token generated after a successful login.
    */
   getAccessToken () {
@@ -73,11 +72,11 @@ class BlinkMobileIdentity {
 
   /**
    * Get settings scoped to a BlinkMobile service.
-   * @function getServiceSettings
+   * @param {Object} additionalParameters - Additional parameters to pass to the settings endpoint.
    * @returns {Object} The settings.
    */
-  getServiceSettings () {
-    return settings(privateVars.get(this).clientName);
+  getServiceSettings (additionalParameters) {
+    return settings(privateVars.get(this).clientName, additionalParameters);
   }
 
   /**
