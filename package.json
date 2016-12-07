@@ -36,7 +36,7 @@
     "aws-sdk": "2.7.11",
     "base64url": "2.0.0",
     "inquirer": "2.0.0",
-    "jsonwebtoken": "7.1.9",
+    "jsonwebtoken": "7.2.0",
     "lodash.memoize": "4.1.2",
     "opn": "4.0.2",
     "request": "2.79.0"
