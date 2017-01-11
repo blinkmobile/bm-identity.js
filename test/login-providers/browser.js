@@ -2,6 +2,7 @@
 
 const test = require('ava');
 const proxyquire = require('proxyquire');
+const querystring = require('querystring');
 
 const requestMock = require('../helpers/request.js');
 const loginProviderBaseMock = require('../helpers/login-provider-base.js');
@@ -71,14 +72,15 @@ test.cb('login() should call opn with correct data in url', (t) => {
     'inquirer': t.context.inquirer,
     'request': t.context.request,
     'opn': (url, options) => {
-      t.is(url, constants.AUTH0_URL +
-        '/authorize' +
-        '?response_type=code' +
-        '&scope=openid refreshIdTokenBeforeSeconds serviceSettingsUrl' +
-        '&client_id=' + CLIENT_ID +
-        '&redirect_uri=' + constants.AUTH0_CALLBACK_URL +
-        '&code_challenge=' + VERIFIER_CHALLENGE +
-        '&code_challenge_method=S256');
+      const expectedQS = querystring.stringify({
+        response_type: 'code',
+        scope: 'openid refreshIdTokenBeforeSeconds serviceSettingsUrl',
+        client_id: CLIENT_ID,
+        redirect_uri: constants.AUTH0_CALLBACK_URL,
+        code_challenge: VERIFIER_CHALLENGE,
+        code_challenge_method: 'S256'
+      });
+      t.is(url, `${constants.AUTH0_URL}/authorize?${expectedQS}`);
       t.deepEqual(options, {
         wait: false
       });
