@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.3.1 - 2017-01-16
+
+### Fixed
+
+- AUTH-16: Querystring passed to opn is now correctly escaped (@simonmarklar)
+
 ## 2.3.0 - 2016-12-01
 
 ### Added

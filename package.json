@@ -1,7 +1,7 @@
 {
   "name": "@blinkmobile/bm-identity",
   "description": "Helper functions for Blink Mobiles single identity",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "main": "index.js",
   "scripts": {
     "ava": "ava",
