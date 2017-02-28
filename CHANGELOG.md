@@ -1,5 +1,13 @@
 # Change Log
 
+## 2.3.2 - 2017-02-28
+
+### Changed
+
+-   update [aws-sdk](https://www.npmjs.com/package/aws-sdk) to [2.11.0](https://github.com/aws/aws-sdk-js/releases/tag/v2.11.0) (from [2.7.21](https://github.com/aws/aws-sdk-js/releases/tag/v2.7.21))
+
+-   update [inquirer](https://www.npmjs.com/package/inquirer) to [3.0.1](https://github.com/SBoudrias/Inquirer.js/releases/tag/v3.0.1) (from [2.0.0](https://github.com/SBoudrias/Inquirer.js/releases/tag/v2.0.0))
+
 ## 2.3.1 - 2017-01-16
 
 ### Fixed
