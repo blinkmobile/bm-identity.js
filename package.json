@@ -2,34 +2,9 @@
   "name": "@blinkmobile/bm-identity",
   "description": "Helper functions for Blink Mobiles single identity",
   "version": "2.3.2",
-  "main": "index.js",
-  "scripts": {
-    "ava": "ava",
-    "eslint": "eslint --fix --cache .",
-    "flow_check": "flow check",
-    "fixpack": "fixpack",
-    "lint": "eslint .",
-    "make-docs": "jsdoc index.js ./lib -r -d ./jsdocs",
-    "test": "npm-run-all lint ava",
-    "postpublish": "greenkeeper-postpublish"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/blinkmobile/bm-identity.js.git"
-  },
-  "keywords": [],
   "author": "Matt Carroll",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/blinkmobile/bm-identity.js/issues"
-  },
-  "homepage": "https://github.com/blinkmobile/bm-identity.js#readme",
-  "engines": {
-    "node": ">=6",
-    "npm": ">=3"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "dependencies": {
     "@blinkmobile/blinkmrc": "1.1.0",
@@ -44,8 +19,7 @@
   "devDependencies": {
     "ava": "^0.18.0",
     "eslint": "^3.11.1",
-    "eslint-config-semistandard": "^7.0.0",
-    "eslint-config-standard": "^6.2.1",
+    "eslint-config-standard": "^7.0.0",
     "eslint-plugin-node": "^4.0.0",
     "eslint-plugin-promise": "^3.3.1",
     "eslint-plugin-standard": "^2.0.1",
@@ -54,9 +28,36 @@
     "greenkeeper-postpublish": "^1.0.1",
     "jsdoc": "^3.4.2",
     "npm-run-all": "^4.0.0",
+    "nyc": "^10.1.2",
     "proxyquire": "^1.7.10"
   },
   "directories": {
     "test": "test"
+  },
+  "engines": {
+    "node": ">=6",
+    "npm": ">=3"
+  },
+  "homepage": "https://github.com/blinkmobile/bm-identity.js#readme",
+  "keywords": [],
+  "license": "ISC",
+  "main": "index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blinkmobile/bm-identity.js.git"
+  },
+  "scripts": {
+    "ava": "nyc ava",
+    "eslint": "eslint --fix --cache .",
+    "fixpack": "fixpack",
+    "flow_check": "flow check",
+    "make-docs": "jsdoc index.js ./lib -r -d ./jsdocs",
+    "nyc": "nyc check-coverage --lines 75",
+    "postpublish": "greenkeeper-postpublish",
+    "posttest": "npm run eslint && npm run flow_check && npm run fixpack",
+    "test": "npm run ava"
   }
 }
