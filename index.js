@@ -1,14 +1,14 @@
-'use strict';
+'use strict'
 
-const assumeRole = require('./lib/aws/assume-role.js');
-const loginCommon = require('./lib/common/login.js');
-const logoutCommon = require('./lib/common/logout.js');
-const tenant = require('./lib/common/tenant.js');
-const profile = require('./lib/auth0/profile.js');
-const getJWT = require('./lib/utils/get-jwt.js');
-const settings = require('./lib/common/settings.js');
+const assumeRole = require('./lib/aws/assume-role.js')
+const loginCommon = require('./lib/common/login.js')
+const logoutCommon = require('./lib/common/logout.js')
+const tenant = require('./lib/common/tenant.js')
+const profile = require('./lib/auth0/profile.js')
+const getJWT = require('./lib/utils/get-jwt.js')
+const settings = require('./lib/common/settings.js')
 
-const privateVars = new WeakMap();
+const privateVars = new WeakMap()
 
 /**
  * Class representing a Blink Mobile identity.
@@ -21,7 +21,7 @@ class BlinkMobileIdentity {
   constructor (clientName) {
     privateVars.set(this, {
       clientName
-    });
+    })
   }
 
   /**
@@ -30,14 +30,14 @@ class BlinkMobileIdentity {
    * @returns {String} The JWT generated after a successful login.
    */
   login (options) {
-    return loginCommon.login(privateVars.get(this).clientName, options);
+    return loginCommon.login(privateVars.get(this).clientName, options)
   }
 
   /**
    * Logout of the client.
    */
   logout () {
-    return logoutCommon.logout(privateVars.get(this).clientName);
+    return logoutCommon.logout(privateVars.get(this).clientName)
   }
 
   /**
@@ -46,7 +46,7 @@ class BlinkMobileIdentity {
    * @returns {Object} The AWS credentials.
    */
   assumeAWSRole (additionalParameters) {
-    return assumeRole(privateVars.get(this).clientName, additionalParameters);
+    return assumeRole(privateVars.get(this).clientName, additionalParameters)
   }
 
   /**
@@ -56,9 +56,9 @@ class BlinkMobileIdentity {
    */
   getProfile (accessToken) {
     if (accessToken) {
-      return profile.getByJWT(accessToken);
+      return profile.getByJWT(accessToken)
     } else {
-      return profile.getByClient(privateVars.get(this).clientName);
+      return profile.getByClient(privateVars.get(this).clientName)
     }
   }
 
@@ -67,7 +67,7 @@ class BlinkMobileIdentity {
    * @returns {String} The access token generated after a successful login.
    */
   getAccessToken () {
-    return getJWT();
+    return getJWT()
   }
 
   /**
@@ -76,7 +76,7 @@ class BlinkMobileIdentity {
    * @returns {Object} The settings.
    */
   getServiceSettings (additionalParameters) {
-    return settings(privateVars.get(this).clientName, additionalParameters);
+    return settings(privateVars.get(this).clientName, additionalParameters)
   }
 
   /**
@@ -84,7 +84,7 @@ class BlinkMobileIdentity {
    * @param {String} clientName - The name of a Client.
    */
   getTenants () {
-    return tenant.get();
+    return tenant.get()
   }
 
   /**
@@ -92,7 +92,7 @@ class BlinkMobileIdentity {
    * @param {String} tenantName - The name of a tenant to set.
    */
   setTenant (tenantName) {
-    return tenant.set(tenantName);
+    return tenant.set(tenantName)
   }
 
   /**
@@ -100,8 +100,8 @@ class BlinkMobileIdentity {
    * @param {String} tenantName - The name of a tenant to remove.
    */
   removeTenant (tenantName) {
-    return tenant.remove(tenantName);
+    return tenant.remove(tenantName)
   }
 }
 
-module.exports = BlinkMobileIdentity;
+module.exports = BlinkMobileIdentity
