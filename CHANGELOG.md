@@ -1,10 +1,18 @@
 # Change Log
 
-## Unreleased
+## 2.3.3 - 2017-03-02
 
 ### Fixed
 
 -   AUTH-24: config store being created when file is loaded
+
+### Dependencies
+
+-   update [aws-sdk](https://www.npmjs.com/package/aws-sdk) to [2.22.0](https://github.com/aws/aws-sdk-js/releases/tag/v2.22.0) (from [2.11.0](https://github.com/aws/aws-sdk-js/releases/tag/v2.11.0))
+
+-   update [inquirer](https://www.npmjs.com/package/inquirer) to [3.0.5](https://github.com/SBoudrias/Inquirer.js/releases/tag/v3.0.5) (from [3.0.1](https://github.com/SBoudrias/Inquirer.js/releases/tag/v3.0.1))
+
+-   update [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) to [7.3.0](https://github.com/auth0/node-jsonwebtoken/blob/master/CHANGELOG.md) (from [7.2.1](https://github.com/auth0/node-jsonwebtoken/blob/master/CHANGELOG.md))
 
 ## 2.3.2 - 2017-02-28
 
