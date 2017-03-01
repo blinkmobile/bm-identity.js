@@ -1,55 +1,55 @@
-'use strict';
+'use strict'
 
-const test = require('ava');
-const proxyquire = require('proxyquire');
+const test = require('ava')
+const proxyquire = require('proxyquire')
 
-const requestMock = require('../helpers/request.js');
-const auth0ClientFactoryMock = require('../helpers/auth0-client-factory.js');
+const requestMock = require('../helpers/request.js')
+const auth0ClientFactoryMock = require('../helpers/auth0-client-factory.js')
 
-const TEST_SUBJECT = '../../lib/aws/assume-role.js';
-const constants = require('../../lib/constants.js');
+const TEST_SUBJECT = '../../lib/aws/assume-role.js'
+const constants = require('../../lib/constants.js')
 
-const ACCESS_KEY_ID = 'valid access key id';
-const SECRET_ACCESS_KEY = 'valid secret access key';
-const SESSION_TOKEN = 'valid session token';
-const CLIENT_NAME = 'valid client name';
-const CLIENT_ID = 'valid client id';
-const JWT = 'a valid jwt';
+const ACCESS_KEY_ID = 'valid access key id'
+const SECRET_ACCESS_KEY = 'valid secret access key'
+const SESSION_TOKEN = 'valid session token'
+const CLIENT_NAME = 'valid client name'
+const CLIENT_ID = 'valid client id'
+const JWT = 'a valid jwt'
 const TENANTS = {
   current: 'a valid tenant',
   previous: [
     'a valid tenant'
   ]
-};
+}
 const RESPONSE = {
   Credentials: {
     AccessKeyId: ACCESS_KEY_ID,
     SecretAccessKey: SECRET_ACCESS_KEY,
     SessionToken: SESSION_TOKEN
   }
-};
+}
 
 test.beforeEach((t) => {
   t.context.tenant = {
     get: () => Promise.resolve(TENANTS)
-  };
+  }
 
   t.context.getJWT = (clientName) => {
-    return Promise.resolve(JWT);
-  };
+    return Promise.resolve(JWT)
+  }
 
   t.context.verifyJWT = (jwt, clientId) => {
-    return Promise.resolve(jwt);
-  };
+    return Promise.resolve(jwt)
+  }
 
   t.context.auth0ClientFactory = auth0ClientFactoryMock(() => {
-    return Promise.resolve(CLIENT_ID);
-  });
+    return Promise.resolve(CLIENT_ID)
+  })
 
   t.context.request = requestMock((url, data, callback) => {
-    callback(null, {}, RESPONSE);
-  });
-});
+    callback(null, {}, RESPONSE)
+  })
+})
 
 test.cb('assumeRole() should return valid aws credentials', (t) => {
   const assumeRole = proxyquire(TEST_SUBJECT, {
@@ -58,7 +58,7 @@ test.cb('assumeRole() should return valid aws credentials', (t) => {
     '../utils/get-jwt.js': t.context.getJWT,
     '../auth0/verify-jwt.js': t.context.verifyJWT,
     '../common/tenant.js': t.context.tenant
-  });
+  })
 
   assumeRole(CLIENT_NAME)
     .then((assumedRole) => {
@@ -66,54 +66,54 @@ test.cb('assumeRole() should return valid aws credentials', (t) => {
         accessKeyId: ACCESS_KEY_ID,
         secretAccessKey: SECRET_ACCESS_KEY,
         sessionToken: SESSION_TOKEN
-      });
-      t.end();
+      })
+      t.end()
     })
     .catch((error) => {
-      t.fail(error);
-      t.end();
-    });
-});
+      t.fail(error)
+      t.end()
+    })
+})
 
 test.cb('assumeRole() should call getJwt() to get access token with clientName', (t) => {
   const assumeRole = proxyquire(TEST_SUBJECT, {
     'request': t.context.request,
     '../auth0/client-factory.js': t.context.auth0ClientFactory,
     '../utils/get-jwt.js': (clientName) => {
-      t.is(clientName, CLIENT_NAME);
-      t.end();
-      return Promise.resolve(JWT);
+      t.is(clientName, CLIENT_NAME)
+      t.end()
+      return Promise.resolve(JWT)
     },
     '../auth0/verify-jwt.js': t.context.verifyJWT,
     '../common/tenant.js': t.context.tenant
-  });
+  })
 
   assumeRole(CLIENT_NAME)
     .catch((error) => {
-      t.fail(error);
-      t.end();
-    });
-});
+      t.fail(error)
+      t.end()
+    })
+})
 
 test.cb('assumeRole() should call getClientIdByName() to get client id with clientName', (t) => {
   const assumeRole = proxyquire(TEST_SUBJECT, {
     'request': t.context.request,
     '../auth0/client-factory.js': auth0ClientFactoryMock((clientName) => {
-      t.is(clientName, CLIENT_NAME);
-      t.end();
-      return Promise.resolve(CLIENT_ID);
+      t.is(clientName, CLIENT_NAME)
+      t.end()
+      return Promise.resolve(CLIENT_ID)
     }),
     '../utils/get-jwt.js': t.context.getJWT,
     '../auth0/verify-jwt.js': t.context.verifyJWT,
     '../common/tenant.js': t.context.tenant
-  });
+  })
 
   assumeRole(CLIENT_NAME)
     .catch((error) => {
-      t.fail(error);
-      t.end();
-    });
-});
+      t.fail(error)
+      t.end()
+    })
+})
 
 test.cb('assumeRole() should call tenant.get() to get current tenant', (t) => {
   const assumeRole = proxyquire(TEST_SUBJECT, {
@@ -123,19 +123,19 @@ test.cb('assumeRole() should call tenant.get() to get current tenant', (t) => {
     '../auth0/verify-jwt.js': t.context.verifyJWT,
     '../common/tenant.js': {
       get: () => {
-        t.pass();
-        t.end();
-        return Promise.resolve({tenants: TENANTS});
+        t.pass()
+        t.end()
+        return Promise.resolve({tenants: TENANTS})
       }
     }
-  });
+  })
 
   assumeRole(CLIENT_NAME)
     .catch((error) => {
-      t.fail(error);
-      t.end();
-    });
-});
+      t.fail(error)
+      t.end()
+    })
+})
 
 test.cb('assumeRole() should call verifyJWT() to ensure jwt is valid', (t) => {
   const assumeRole = proxyquire(TEST_SUBJECT, {
@@ -143,25 +143,25 @@ test.cb('assumeRole() should call verifyJWT() to ensure jwt is valid', (t) => {
     '../auth0/client-factory.js': t.context.auth0ClientFactory,
     '../utils/get-jwt.js': t.context.getJWT,
     '../auth0/verify-jwt.js': (jwt, clientId) => {
-      t.is(jwt, JWT);
-      t.is(clientId, CLIENT_ID);
-      t.end();
-      return Promise.resolve(jwt);
+      t.is(jwt, JWT)
+      t.is(clientId, CLIENT_ID)
+      t.end()
+      return Promise.resolve(jwt)
     },
     '../common/tenant.js': t.context.tenant
-  });
+  })
 
   assumeRole(CLIENT_NAME)
     .catch((error) => {
-      t.fail(error);
-      t.end();
-    });
-});
+      t.fail(error)
+      t.end()
+    })
+})
 
 test.cb('assumeRole() should call request with the correct data and additional parameters', (t) => {
   const assumeRole = proxyquire(TEST_SUBJECT, {
     'request': requestMock((url, data, callback) => {
-      t.is(url, `${constants.AUTH0_URL}/delegation`);
+      t.is(url, `${constants.AUTH0_URL}/delegation`)
       t.deepEqual(data.json, {
         client_id: CLIENT_ID,
         id_token: JWT,
@@ -171,44 +171,44 @@ test.cb('assumeRole() should call request with the correct data and additional p
         bmService: CLIENT_NAME,
         bmTenant: TENANTS.current,
         test: 'prop'
-      });
-      t.end();
-      callback(null, {}, RESPONSE);
+      })
+      t.end()
+      callback(null, {}, RESPONSE)
     }),
     '../auth0/client-factory.js': t.context.auth0ClientFactory,
     '../utils/get-jwt.js': t.context.getJWT,
     '../auth0/verify-jwt.js': t.context.verifyJWT,
     '../common/tenant.js': t.context.tenant
-  });
+  })
 
   assumeRole(CLIENT_NAME, { test: 'prop' })
     .catch((error) => {
-      t.fail(error);
-      t.end();
-    });
-});
+      t.fail(error)
+      t.end()
+    })
+})
 
 test.cb('assumeRole() should reject if request returns an error', (t) => {
   const assumeRole = proxyquire(TEST_SUBJECT, {
     'request': requestMock((url, data, callback) => {
-      callback('test error message');
+      callback('test error message')
     }),
     '../auth0/client-factory.js': t.context.auth0ClientFactory,
     '../utils/get-jwt.js': t.context.getJWT,
     '../auth0/verify-jwt.js': t.context.verifyJWT,
     '../common/tenant.js': t.context.tenant
-  });
+  })
 
   assumeRole(CLIENT_NAME)
     .then(() => {
-      t.fail();
-      t.end();
+      t.fail()
+      t.end()
     })
     .catch((error) => {
-      t.is('test error message', error);
-      t.end();
-    });
-});
+      t.is('test error message', error)
+      t.end()
+    })
+})
 
 test.cb('assumeRole() should should reject with error if request returns an error in the body', (t) => {
   const assumeRole = proxyquire(TEST_SUBJECT, {
@@ -216,24 +216,24 @@ test.cb('assumeRole() should should reject with error if request returns an erro
       callback(null, {}, {
         error: 'error code',
         error_description: 'test error message'
-      });
+      })
     }),
     '../auth0/client-factory.js': t.context.auth0ClientFactory,
     '../utils/get-jwt.js': t.context.getJWT,
     '../auth0/verify-jwt.js': t.context.verifyJWT,
     '../common/tenant.js': t.context.tenant
-  });
+  })
 
   assumeRole(CLIENT_NAME)
     .then(() => {
-      t.fail();
-      t.end();
+      t.fail()
+      t.end()
     })
     .catch((error) => {
-      t.deepEqual(error, new Error('test error message'));
-      t.end();
-    });
-});
+      t.deepEqual(error, new Error('test error message'))
+      t.end()
+    })
+})
 
 test.cb('assumeRole() should should reject with custom message if request returns an "jwt expired" error in the body', (t) => {
   const assumeRole = proxyquire(TEST_SUBJECT, {
@@ -241,21 +241,21 @@ test.cb('assumeRole() should should reject with custom message if request return
       callback(null, {}, {
         error: 'invalid',
         error_description: 'jwt expired'
-      });
+      })
     }),
     '../auth0/client-factory.js': t.context.auth0ClientFactory,
     '../utils/get-jwt.js': t.context.getJWT,
     '../auth0/verify-jwt.js': t.context.verifyJWT,
     '../common/tenant.js': t.context.tenant
-  });
+  })
 
   assumeRole(CLIENT_NAME)
     .then(() => {
-      t.fail();
-      t.end();
+      t.fail()
+      t.end()
     })
     .catch((error) => {
-      t.deepEqual(error, new Error('Unauthorised, your access token has expired. Please login again.'));
-      t.end();
-    });
-});
+      t.deepEqual(error, new Error('Unauthorised, your access token has expired. Please login again.'))
+      t.end()
+    })
+})

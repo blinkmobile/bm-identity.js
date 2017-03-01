@@ -1,11 +1,11 @@
-'use strict';
+'use strict'
 
 function jsonwebtokenMock (decodeFn) {
   return {
     decode: (jwt) => {
-      return decodeFn(jwt);
+      return decodeFn(jwt)
     }
-  };
+  }
 }
 
-module.exports = jsonwebtokenMock;
+module.exports = jsonwebtokenMock
