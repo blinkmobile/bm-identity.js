@@ -5,9 +5,11 @@ function userConfigStoreMock (userLoadFn, userUpdateFn, userWriteFn) {
   userUpdateFn = userUpdateFn || ((updateFn, options) => Promise.resolve(updateFn({})));
   userWriteFn = userWriteFn || ((config, options) => Promise.resolve(config));
   return {
-    load: () => userLoadFn(),
-    update: (updateFn) => userUpdateFn(updateFn),
-    write: (config) => userWriteFn(config)
+    getStore: () => ({
+      load: () => userLoadFn(),
+      update: (updateFn) => userUpdateFn(updateFn),
+      write: (config) => userWriteFn(config)
+    })
   };
 }
 

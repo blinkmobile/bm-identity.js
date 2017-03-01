@@ -1,5 +1,11 @@
 # Change Log
 
+## Unreleased
+
+### Fixed
+
+-   AUTH-24: config store being created when file is loaded
+
 ## 2.3.2 - 2017-02-28
 
 ### Changed
