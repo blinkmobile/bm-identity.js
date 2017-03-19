@@ -2,7 +2,7 @@
   "name": "@blinkmobile/bm-identity",
   "description": "Helper functions for Blink Mobiles single identity",
   "version": "2.3.3",
-  "author": "Matt Carroll",
+  "author": "Matt Carroll <matt.carroll139@gmail.com> (https://github.com/mymattcarroll)",
   "bugs": {
     "url": "https://github.com/blinkmobile/bm-identity.js/issues"
   },
@@ -24,7 +24,7 @@
     "eslint-plugin-promise": "^3.3.1",
     "eslint-plugin-standard": "^2.0.1",
     "fixpack": "^2.3.1",
-    "flow-bin": "^0.41.0",
+    "flow-bin": "^0.42.0",
     "greenkeeper-postpublish": "^1.0.1",
     "jsdoc": "^3.4.2",
     "npm-run-all": "^4.0.0",
@@ -55,9 +55,9 @@
     "fixpack": "fixpack",
     "flow_check": "flow check",
     "make-docs": "jsdoc index.js ./lib -r -d ./jsdocs",
-    "nyc": "nyc check-coverage --lines 75",
+    "nyc": "nyc check-coverage",
     "postpublish": "greenkeeper-postpublish",
-    "posttest": "npm run eslint && npm run flow_check && npm run fixpack",
+    "posttest": "npm run nyc && npm run eslint && npm run flow_check && npm run fixpack",
     "test": "npm run ava"
   }
 }
