@@ -75,7 +75,7 @@ class BlinkMobileIdentity {
    * Get access token generated after a successful login
    * @returns {String} The access token generated after a successful login.
    */
-  getAccessToken () /* : Promise<string> */ {
+  getAccessToken () /* : Promise<string | void> */ {
     return getJWT()
   }
 

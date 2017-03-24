@@ -23,7 +23,13 @@ test.beforeEach((t) => {
 
       'jsonwebtoken': jsonwebtokenMock((jwt) => DECODED),
 
-      '../utils/get-jwt.js': (clientName) => Promise.resolve(JWT)
+      '../utils/get-jwt.js': (clientName) => Promise.resolve(JWT),
+
+      '../auth0/client-factory.js': {
+        getClientIdByName: () => Promise.resolve('client id')
+      },
+
+      '../auth0/verify-jwt.js': (jwt) => Promise.resolve(jwt)
     }, overrides))
   }
 })
@@ -43,14 +49,6 @@ test('Should reject if a getJwt() throws an error', (t) => {
   t.throws(settings(CLIENT_NAME), 'test error')
 })
 
-test('Should reject if a getJwt() does not return a jwt', (t) => {
-  const settings = t.context.getTestSubject({
-    '../utils/get-jwt.js': (clientName) => Promise.resolve()
-  })
-
-  t.throws(settings(CLIENT_NAME), 'Unauthenticated, please login before using this service.')
-})
-
 test('Should call decode()', (t) => {
   t.plan(1)
   const settings = t.context.getTestSubject({
@@ -66,14 +64,6 @@ test('Should call decode()', (t) => {
 test('Should reject if decode() does not return valid payload', (t) => {
   const settings = t.context.getTestSubject({
     'jsonwebtoken': jsonwebtokenMock((jwt) => undefined)
-  })
-
-  t.throws(settings(CLIENT_NAME), 'Malformed access token. Please login again.')
-})
-
-test('Should reject if decode() does not return an object with an serviceSettingsUrl property', (t) => {
-  const settings = t.context.getTestSubject({
-    'jsonwebtoken': jsonwebtokenMock((jwt) => ({test: 123}))
   })
 
   t.throws(settings(CLIENT_NAME), 'Malformed access token. Please login again.')
