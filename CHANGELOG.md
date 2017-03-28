@@ -1,5 +1,11 @@
 # Change Log
 
+## Unreleased
+
+### Added
+
+-   AUTH-29: verification of jwt before requesting service settings
+
 ## 2.3.3 - 2017-03-02
 
 ### Fixed
