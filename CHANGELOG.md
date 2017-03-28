@@ -2,9 +2,22 @@
 
 ## Unreleased
 
+## 2.3.4 - 2017-03-28
+
 ### Added
 
 -   AUTH-29: verification of jwt before requesting service settings
+
+### Dependencies
+
+-   update [aws-sdk](https://www.npmjs.com/package/aws-sdk) to [2.33.0](https://github.com/aws/aws-sdk-js/releases/tag/v2.33.0) (from [2.22.0](https://github.c
+om/aws/aws-sdk-js/releases/tag/v2.22.0))
+
+-   update [inquirer](https://www.npmjs.com/package/inquirer) to [3.0.6](https://github.com/SBoudrias/Inquirer.js/releases/tag/v3.0.6) (from [3.0.5](https://gi
+thub.com/SBoudrias/Inquirer.js/releases/tag/v3.0.5))
+
+-   update [request](https://www.npmjs.com/package/request) to [2.81.0](https://github.com/request/request/blob/master/CHANGELOG.md) (from [2.79.0](https://git
+hub.com/request/request/blob/master/CHANGELOG.md))
 
 ## 2.3.3 - 2017-03-02
 

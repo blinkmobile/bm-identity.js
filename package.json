@@ -1,7 +1,7 @@
 {
   "name": "@blinkmobile/bm-identity",
   "description": "Helper functions for Blink Mobiles single identity",
-  "version": "2.3.3",
+  "version": "2.3.4",
   "author": "Matt Carroll <matt.carroll139@gmail.com> (https://github.com/mymattcarroll)",
   "bugs": {
     "url": "https://github.com/blinkmobile/bm-identity.js/issues"
