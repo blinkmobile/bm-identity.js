@@ -76,24 +76,16 @@ test.cb('logout() should call request with the clientId returned from auth0Clien
     })
 })
 
-test.cb('logout() should reject if a request returns an error', (t) => {
+test('logout() should reject if a request returns an error', (t) => {
   const commonLogout = proxyquire(TEST_SUBJECT, {
     '../auth0/client-factory.js': t.context.auth0ClientFactory,
     'request': requestMock(null, (url, callback) => {
-      callback('Test error message')
+      callback(new Error('Test error message'))
     }),
     '../utils/user-config.js': t.context.userConfigStore
   })
 
-  commonLogout.logout(t.context.clientName)
-    .then(() => {
-      t.fail()
-      t.end()
-    })
-    .catch((error) => {
-      t.is('Test error message', error)
-      t.end()
-    })
+  t.throws(commonLogout.logout(t.context.clientName), 'Test error message')
 })
 
 test.cb('logout() should call userConfigStore.update() to update and remove access token with clientName', (t) => {

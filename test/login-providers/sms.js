@@ -113,25 +113,17 @@ test.cb('login() request for passwordless start should use correct data and url'
     })
 })
 
-test.cb('login() should should reject if request returns an error', (t) => {
+test('login() should should reject if request returns an error', (t) => {
   const SMSLoginProvider = proxyquire(TEST_SUBJECT, {
     'inquirer': t.context.inquirer,
     'request': requestMock((url, body, callback) => {
-      callback('Test error message')
+      callback(new Error('Test error message'))
     }),
     './login-provider-base.js': t.context.loginProviderBase
   })
   const smsLoginProvider = new SMSLoginProvider(CLIENT_ID)
 
-  smsLoginProvider.login()
-    .then(() => {
-      t.fail()
-      t.end()
-    })
-    .catch(error => {
-      t.is(error, 'Test error message')
-      t.end()
-    })
+  t.throws(smsLoginProvider.login(), 'Test error message')
 })
 
 test.cb('login() should should reject if request returns an error in the body', (t) => {

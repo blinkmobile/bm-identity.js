@@ -101,25 +101,17 @@ test.cb('requestJWT() request for jwt should use correct data and url', (t) => {
     })
 })
 
-test.cb('requestJWT() should reject if request returns an error', (t) => {
+test('requestJWT() should reject if request returns an error', (t) => {
   const LoginProviderBase = proxyquire(TEST_SUBJECT, {
     'inquirer': t.context.inquirer,
     'request': requestMock((url, body, callback) => {
-      callback('Test error message')
+      callback(new Error('Test error message'))
     }),
     '../utils/user-config.js': t.context.userConfigStore
   })
   const loginProviderBase = new LoginProviderBase(CLIENT_ID)
 
-  loginProviderBase.requestJWT(USERNAME, PASSWORD, CONNECTION)
-    .then(() => {
-      t.fail()
-      t.end()
-    })
-    .catch(error => {
-      t.is(error, 'Test error message')
-      t.end()
-    })
+  t.throws(loginProviderBase.requestJWT(USERNAME, PASSWORD, CONNECTION), 'Test error message')
 })
 
 test.cb('requestJWT() should reject if request returns an bad connection error in the body', (t) => {

@@ -20,12 +20,12 @@
     "ava": "^0.18.0",
     "eslint": "^3.11.1",
     "eslint-config-standard": "^10.0.0",
+    "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-node": "^4.0.0",
     "eslint-plugin-promise": "^3.3.1",
-    "eslint-plugin-standard": "^2.0.1",
+    "eslint-plugin-standard": "^3.0.0",
     "fixpack": "^2.3.1",
     "flow-bin": "^0.43.0",
-    "greenkeeper-postpublish": "^1.0.1",
     "jsdoc": "^3.4.2",
     "npm-run-all": "^4.0.0",
     "nyc": "^10.1.2",
@@ -56,8 +56,8 @@
     "flow_check": "flow check",
     "make-docs": "jsdoc index.js ./lib -r -d ./jsdocs",
     "nyc": "nyc check-coverage",
-    "postpublish": "greenkeeper-postpublish",
-    "posttest": "npm run nyc && npm run eslint && npm run flow_check && npm run fixpack",
+    "posttest": "npm run nyc && npm run eslint && npm run flow_check",
+    "pretest": "npm run fixpack",
     "test": "npm run ava"
   }
 }
