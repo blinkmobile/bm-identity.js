@@ -126,7 +126,7 @@ test('verifyJWT() should reject if request.post() returns an error', (t) => {
     })
   })
 
-  t.throws(verifyJWT(JWT, CLIENT_ID), 'Test error message')
+  return t.throws(verifyJWT(JWT, CLIENT_ID), 'Test error message')
 })
 
 test('verifyJWT() should reject if request.post() returns an error in the body', (t) => {

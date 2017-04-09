@@ -37,7 +37,7 @@ test('logout() should not reject', (t) => {
     '../utils/user-config.js': t.context.userConfigStore
   })
 
-  t.notThrows(commonLogout.logout(t.context.clientName))
+  return t.notThrows(commonLogout.logout(t.context.clientName))
 })
 
 test.cb('logout() should call auth0ClientFactory with clientName from logout', (t) => {
@@ -85,7 +85,7 @@ test('logout() should reject if a request returns an error', (t) => {
     '../utils/user-config.js': t.context.userConfigStore
   })
 
-  t.throws(commonLogout.logout(t.context.clientName), 'Test error message')
+  return t.throws(commonLogout.logout(t.context.clientName), 'Test error message')
 })
 
 test.cb('logout() should call userConfigStore.update() to update and remove access token with clientName', (t) => {

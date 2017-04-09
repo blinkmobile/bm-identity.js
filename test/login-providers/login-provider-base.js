@@ -111,7 +111,7 @@ test('requestJWT() should reject if request returns an error', (t) => {
   })
   const loginProviderBase = new LoginProviderBase(CLIENT_ID)
 
-  t.throws(loginProviderBase.requestJWT(USERNAME, PASSWORD, CONNECTION), 'Test error message')
+  return t.throws(loginProviderBase.requestJWT(USERNAME, PASSWORD, CONNECTION), 'Test error message')
 })
 
 test.cb('requestJWT() should reject if request returns an bad connection error in the body', (t) => {

@@ -199,7 +199,7 @@ test('assumeRole() should reject if request returns an error', (t) => {
     '../common/tenant.js': t.context.tenant
   })
 
-  t.throws(assumeRole(CLIENT_NAME), 'test error message')
+  return t.throws(assumeRole(CLIENT_NAME), 'test error message')
 })
 
 test.cb('assumeRole() should should reject with error if request returns an error in the body', (t) => {

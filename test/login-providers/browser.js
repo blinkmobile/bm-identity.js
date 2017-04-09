@@ -190,7 +190,7 @@ test('login() should should reject if request returns an error', (t) => {
   })
   const browserLoginProvider = new BrowserLoginProvider(CLIENT_ID)
 
-  t.throws(browserLoginProvider.login(), 'Test error message')
+  return t.throws(browserLoginProvider.login(), 'Test error message')
 })
 
 test.cb('login() should should reject if request returns an error in the body', (t) => {

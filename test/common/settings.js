@@ -46,7 +46,7 @@ test('Should reject if a getJwt() throws an error', (t) => {
     '../utils/get-jwt.js': (clientName) => Promise.reject(new Error('test error'))
   })
 
-  t.throws(settings(CLIENT_NAME), 'test error')
+  return t.throws(settings(CLIENT_NAME), 'test error')
 })
 
 test('Should call decode()', (t) => {
@@ -66,7 +66,7 @@ test('Should reject if decode() does not return valid payload', (t) => {
     'jsonwebtoken': jsonwebtokenMock((jwt) => undefined)
   })
 
-  t.throws(settings(CLIENT_NAME), 'Malformed access token. Please login again.')
+  return t.throws(settings(CLIENT_NAME), 'Malformed access token. Please login again.')
 })
 
 test('Should call request() with correct arguments', (t) => {
@@ -106,7 +106,7 @@ test('Should reject if request() returns an error', (t) => {
     'request': (options, callback) => callback(new Error('test error'))
   })
 
-  t.throws(settings(CLIENT_NAME), 'test error')
+  return t.throws(settings(CLIENT_NAME), 'test error')
 })
 
 test('Should reject if request() does not return a 200 response', (t) => {
@@ -114,5 +114,5 @@ test('Should reject if request() does not return a 200 response', (t) => {
     'request': (options, callback) => callback(null, {statusCode: 123}, {message: 'this is the error'})
   })
 
-  t.throws(settings(CLIENT_NAME), 'Could not find Service Settings: this is the error')
+  return t.throws(settings(CLIENT_NAME), 'Could not find Service Settings: this is the error')
 })
