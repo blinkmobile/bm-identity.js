@@ -188,10 +188,10 @@ test.cb('assumeRole() should call request with the correct data and additional p
     })
 })
 
-test.cb('assumeRole() should reject if request returns an error', (t) => {
+test('assumeRole() should reject if request returns an error', (t) => {
   const assumeRole = proxyquire(TEST_SUBJECT, {
     'request': requestMock((url, data, callback) => {
-      callback('test error message')
+      callback(new Error('test error message'))
     }),
     '../auth0/client-factory.js': t.context.auth0ClientFactory,
     '../utils/get-jwt.js': t.context.getJWT,
@@ -199,15 +199,7 @@ test.cb('assumeRole() should reject if request returns an error', (t) => {
     '../common/tenant.js': t.context.tenant
   })
 
-  assumeRole(CLIENT_NAME)
-    .then(() => {
-      t.fail()
-      t.end()
-    })
-    .catch((error) => {
-      t.is('test error message', error)
-      t.end()
-    })
+  t.throws(assumeRole(CLIENT_NAME), 'test error message')
 })
 
 test.cb('assumeRole() should should reject with error if request returns an error in the body', (t) => {

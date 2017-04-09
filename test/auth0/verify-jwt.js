@@ -120,17 +120,13 @@ test('verifyJWT() should call request.post() if jwt expires after a certain peri
 })
 
 test('verifyJWT() should reject if request.post() returns an error', (t) => {
-  t.plan(1)
   const verifyJWT = t.context.getTestSubject({
     'request': requestMock((url, body, callback) => {
-      callback('Test error message')
+      callback(new Error('Test error message'))
     })
   })
 
-  return verifyJWT(JWT, CLIENT_ID)
-    .catch((error) => {
-      t.is(error, 'Test error message')
-    })
+  t.throws(verifyJWT(JWT, CLIENT_ID), 'Test error message')
 })
 
 test('verifyJWT() should reject if request.post() returns an error in the body', (t) => {

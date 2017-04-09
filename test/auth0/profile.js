@@ -164,23 +164,15 @@ test.cb('getByJWT() should call request with the jwt token passed in', (t) => {
     })
 })
 
-test.cb('getByJWT() should reject if a request returns an error', (t) => {
+test('getByJWT() should reject if a request returns an error', (t) => {
   const profile = proxyquire(TEST_SUBJECT, {
     'request': requestMock((url, data, callback) => {
-      callback('Test error message')
+      callback(new Error('Test error message'))
     }),
     '../utils/get-jwt.js': t.context.getJWT
   })
 
-  profile.getByJWT(JWT)
-    .then(() => {
-      t.fail()
-      t.end()
-    })
-    .catch((error) => {
-      t.is('Test error message', error)
-      t.end()
-    })
+  t.throws(profile.getByJWT(JWT), 'Test error message')
 })
 
 test.cb('getByJWT() should reject if a request returns \'Unauthorized\'', (t) => {

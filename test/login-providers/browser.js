@@ -178,11 +178,11 @@ test.cb('login() should make request with the correct url and data', (t) => {
     })
 })
 
-test.cb('login() should should reject if request returns an error', (t) => {
+test('login() should should reject if request returns an error', (t) => {
   const BrowserLoginProvider = proxyquire(TEST_SUBJECT, {
     'inquirer': t.context.inquirer,
     'request': requestMock((url, body, callback) => {
-      callback('Test error message')
+      callback(new Error('Test error message'))
     }),
     'opn': t.context.opn,
     'base64url': t.context.base64url,
@@ -190,15 +190,7 @@ test.cb('login() should should reject if request returns an error', (t) => {
   })
   const browserLoginProvider = new BrowserLoginProvider(CLIENT_ID)
 
-  browserLoginProvider.login()
-    .then(() => {
-      t.fail()
-      t.end()
-    })
-    .catch(error => {
-      t.is(error, 'Test error message')
-      t.end()
-    })
+  t.throws(browserLoginProvider.login(), 'Test error message')
 })
 
 test.cb('login() should should reject if request returns an error in the body', (t) => {
