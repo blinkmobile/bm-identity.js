@@ -172,7 +172,7 @@ test('getByJWT() should reject if a request returns an error', (t) => {
     '../utils/get-jwt.js': t.context.getJWT
   })
 
-  t.throws(profile.getByJWT(JWT), 'Test error message')
+  return t.throws(profile.getByJWT(JWT), 'Test error message')
 })
 
 test.cb('getByJWT() should reject if a request returns \'Unauthorized\'', (t) => {

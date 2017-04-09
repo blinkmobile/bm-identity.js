@@ -147,7 +147,7 @@ test('remove() should reject with error if no tenant name is passed in', (t) => 
     '../utils/user-config.js': t.context.userConfigStore
   })
 
-  t.throws(tenant.remove(), 'Must specify a tenant to remove')
+  return t.throws(tenant.remove(), 'Must specify a tenant to remove')
 })
 
 test.cb('remove() should call userConfigStore.update() to remove the tenant name passed in to current', (t) => {
