@@ -25,7 +25,7 @@
     "eslint-plugin-promise": "^3.3.1",
     "eslint-plugin-standard": "^3.0.0",
     "fixpack": "^2.3.1",
-    "flow-bin": "^0.43.0",
+    "flow-bin": "^0.44.0",
     "jsdoc": "^3.4.2",
     "npm-run-all": "^4.0.0",
     "nyc": "^10.1.2",
