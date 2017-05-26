@@ -36,15 +36,15 @@ test.beforeEach((t) => {
   })
 })
 
-test.cb('getByClient() should call getJwt() to get access token with clientName', (t) => {
+test.cb('getByClient() should call getJwt() to get access token', (t) => {
   const profile = proxyquire(TEST_SUBJECT, {
     'request': t.context.request,
     './client-factory.js': t.context.auth0ClientFactory,
     './verify-jwt.js': t.context.verifyJWT,
-    '../utils/get-jwt.js': (clientName) => {
-      t.is(clientName, CLIENT_NAME)
+    '../utils/get-jwt.js': () => {
+      t.pass()
       t.end()
-      return Promise.resolve(JWT)
+      return Promise.resolve()
     }
   })
 
