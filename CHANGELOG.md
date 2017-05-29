@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## 2.3.5 - 2017-05-29
+
+### Dependencies
+
+-   update [aws-sdk](https://www.npmjs.com/package/aws-sdk) to [2.58.0](https://github.com/aws/aws-sdk-js/releases/tag/v2.58.0) (from [2.33.0](https://github.com/aws/aws-sdk-js/releases/tag/v2.33.0))
+
+-   update [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) to [7.4.1](https://github.com/auth0/node-jsonwebtoken/blob/master/CHANGELOG.md) (from [7.3.0](https://github.com/auth0/node-jsonwebtoken/blob/master/CHANGELOG.md))
+
+-   update [opn](https://www.npmjs.com/package/opn) to 5.0.0 (from 4.0.2)
+
 ## 2.3.4 - 2017-03-28
 
 ### Added
