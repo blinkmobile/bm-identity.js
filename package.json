@@ -10,7 +10,7 @@
     "@blinkmobile/blinkmrc": "1.1.0",
     "aws-sdk": "2.64.0",
     "base64url": "2.0.0",
-    "inquirer": "3.0.6",
+    "inquirer": "3.1.0",
     "jsonwebtoken": "7.4.1",
     "lodash.memoize": "4.1.2",
     "opn": "5.0.0",
