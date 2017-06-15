@@ -96,10 +96,10 @@ test.cb('login() should create a usernameLoginProvider if all options are passed
     email: 'email',
     sms: '12345'
   })
-  .catch(() => {
-    t.fail()
-    t.end()
-  })
+    .catch(() => {
+      t.fail()
+      t.end()
+    })
 })
 
 test.cb('login() should create a usernameLoginProvider and call login() with null if username is passed in as true', (t) => {
@@ -123,10 +123,10 @@ test.cb('login() should create a usernameLoginProvider and call login() with nul
     email: 'email',
     sms: '12345'
   })
-  .catch(() => {
-    t.fail()
-    t.end()
-  })
+    .catch(() => {
+      t.fail()
+      t.end()
+    })
 })
 
 test.cb('login() should create an emailLoginProvider if all options but username are', (t) => {
@@ -147,10 +147,10 @@ test.cb('login() should create an emailLoginProvider if all options but username
     email: 'email',
     sms: '12345'
   })
-  .catch(() => {
-    t.fail()
-    t.end()
-  })
+    .catch(() => {
+      t.fail()
+      t.end()
+    })
 })
 
 test.cb('login() should create a emailLoginProvider and call login() with null if email is passed in as true', (t) => {
@@ -171,10 +171,10 @@ test.cb('login() should create a emailLoginProvider and call login() with null i
     email: true,
     sms: '12345'
   })
-  .catch(() => {
-    t.fail()
-    t.end()
-  })
+    .catch(() => {
+      t.fail()
+      t.end()
+    })
 })
 
 test.cb('login() should create an smsLoginProvider if only the sms option is passed', (t) => {
@@ -194,10 +194,10 @@ test.cb('login() should create an smsLoginProvider if only the sms option is pas
   commonLogin.login(t.context.clientName, {
     sms: '12345'
   })
-  .catch(() => {
-    t.fail()
-    t.end()
-  })
+    .catch(() => {
+      t.fail()
+      t.end()
+    })
 })
 
 test.cb('login() should create a smsLoginProvider and call login() with null if sms is passed in as true', (t) => {
@@ -217,10 +217,10 @@ test.cb('login() should create a smsLoginProvider and call login() with null if 
   commonLogin.login(t.context.clientName, {
     sms: true
   })
-  .catch(() => {
-    t.fail()
-    t.end()
-  })
+    .catch(() => {
+      t.fail()
+      t.end()
+    })
 })
 
 test.cb('login() should create an browserLoginProvider if no option are passed', (t) => {
