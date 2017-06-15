@@ -153,7 +153,8 @@ export type LoginOptions = {
   email?: string | true,
   password?: string,
   sms?: string | true,
-  username?: string | true
+  username?: string | true,
+  storeJwt?: boolean
 }
 
 export type Tenants = {

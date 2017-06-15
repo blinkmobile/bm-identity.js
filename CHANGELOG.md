@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Breaking Changes
+
+-   ANALYTICS-125: Added login option `storeJwt` to store jwt on local file system. **This property will default to `false`**. This was the default behaviour in previous releases.
+
 ## 2.3.5 - 2017-05-29
 
 ### Dependencies

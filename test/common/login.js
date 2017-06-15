@@ -242,3 +242,48 @@ test.cb('login() should create an browserLoginProvider if no option are passed',
       t.end()
     })
 })
+
+test('login() should set the correct default for storeJwt option', (t) => {
+  const commonLogin = proxyquire(TEST_SUBJECT, {
+    '../auth0/client-factory.js': t.context.auth0ClientFactory,
+    '../login-providers/username.js': t.context.usernameLoginProvider,
+    '../login-providers/email.js': t.context.emailLoginProvider,
+    '../login-providers/sms.js': t.context.smsLoginProvider,
+    '../login-providers/browser.js': loginProviderMock((clientId, storeJwt) => {
+      t.falsy(storeJwt)
+      return Promise.resolve(JWT)
+    })
+  })
+
+  return commonLogin.login(t.context.clientName)
+})
+
+test('login() should leave the storeJwt option as true is set to true', (t) => {
+  const commonLogin = proxyquire(TEST_SUBJECT, {
+    '../auth0/client-factory.js': t.context.auth0ClientFactory,
+    '../login-providers/username.js': t.context.usernameLoginProvider,
+    '../login-providers/email.js': t.context.emailLoginProvider,
+    '../login-providers/sms.js': t.context.smsLoginProvider,
+    '../login-providers/browser.js': loginProviderMock((clientId, storeJwt) => {
+      t.is(storeJwt, true)
+      return Promise.resolve(JWT)
+    })
+  })
+
+  return commonLogin.login(t.context.clientName, { storeJwt: true })
+})
+
+test('login() should leave the storeJwt option as false is set to false', (t) => {
+  const commonLogin = proxyquire(TEST_SUBJECT, {
+    '../auth0/client-factory.js': t.context.auth0ClientFactory,
+    '../login-providers/username.js': t.context.usernameLoginProvider,
+    '../login-providers/email.js': t.context.emailLoginProvider,
+    '../login-providers/sms.js': t.context.smsLoginProvider,
+    '../login-providers/browser.js': loginProviderMock((clientId, storeJwt) => {
+      t.is(storeJwt, false)
+      return Promise.resolve(JWT)
+    })
+  })
+
+  return commonLogin.login(t.context.clientName, { storeJwt: false })
+})
