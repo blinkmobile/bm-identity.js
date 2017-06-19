@@ -30,6 +30,7 @@ interface LoginOptions {
   password? : String, // Will be prompted for password if username is truthy
   email? : String|Boolean, // Can also pass true to be prompted for email address
   sms? : String|Boolean, // Can also pass true to be prompted for phone number
+  storeJwt? : Boolean, // Set to true to store jwt on local file system, defaults to false
 }
 ```
 
@@ -39,6 +40,10 @@ blinkMobileIdentity.login()
     // Use jwt access token.
   });
 ```
+
+#### `storeJwt` Option
+
+-   If set to `true`, will use [@blinkmobile/blinkmrc User Config](https://www.npmjs.com/package/@blinkmobile/blinkmrc) to store on local file system for later use.
 
 ### Logout
 

@@ -96,10 +96,10 @@ test.cb('login() should create a usernameLoginProvider if all options are passed
     email: 'email',
     sms: '12345'
   })
-  .catch(() => {
-    t.fail()
-    t.end()
-  })
+    .catch(() => {
+      t.fail()
+      t.end()
+    })
 })
 
 test.cb('login() should create a usernameLoginProvider and call login() with null if username is passed in as true', (t) => {
@@ -123,10 +123,10 @@ test.cb('login() should create a usernameLoginProvider and call login() with nul
     email: 'email',
     sms: '12345'
   })
-  .catch(() => {
-    t.fail()
-    t.end()
-  })
+    .catch(() => {
+      t.fail()
+      t.end()
+    })
 })
 
 test.cb('login() should create an emailLoginProvider if all options but username are', (t) => {
@@ -147,10 +147,10 @@ test.cb('login() should create an emailLoginProvider if all options but username
     email: 'email',
     sms: '12345'
   })
-  .catch(() => {
-    t.fail()
-    t.end()
-  })
+    .catch(() => {
+      t.fail()
+      t.end()
+    })
 })
 
 test.cb('login() should create a emailLoginProvider and call login() with null if email is passed in as true', (t) => {
@@ -171,10 +171,10 @@ test.cb('login() should create a emailLoginProvider and call login() with null i
     email: true,
     sms: '12345'
   })
-  .catch(() => {
-    t.fail()
-    t.end()
-  })
+    .catch(() => {
+      t.fail()
+      t.end()
+    })
 })
 
 test.cb('login() should create an smsLoginProvider if only the sms option is passed', (t) => {
@@ -194,10 +194,10 @@ test.cb('login() should create an smsLoginProvider if only the sms option is pas
   commonLogin.login(t.context.clientName, {
     sms: '12345'
   })
-  .catch(() => {
-    t.fail()
-    t.end()
-  })
+    .catch(() => {
+      t.fail()
+      t.end()
+    })
 })
 
 test.cb('login() should create a smsLoginProvider and call login() with null if sms is passed in as true', (t) => {
@@ -217,10 +217,10 @@ test.cb('login() should create a smsLoginProvider and call login() with null if 
   commonLogin.login(t.context.clientName, {
     sms: true
   })
-  .catch(() => {
-    t.fail()
-    t.end()
-  })
+    .catch(() => {
+      t.fail()
+      t.end()
+    })
 })
 
 test.cb('login() should create an browserLoginProvider if no option are passed', (t) => {
@@ -241,4 +241,49 @@ test.cb('login() should create an browserLoginProvider if no option are passed',
       t.fail()
       t.end()
     })
+})
+
+test('login() should set the correct default for storeJwt option', (t) => {
+  const commonLogin = proxyquire(TEST_SUBJECT, {
+    '../auth0/client-factory.js': t.context.auth0ClientFactory,
+    '../login-providers/username.js': t.context.usernameLoginProvider,
+    '../login-providers/email.js': t.context.emailLoginProvider,
+    '../login-providers/sms.js': t.context.smsLoginProvider,
+    '../login-providers/browser.js': loginProviderMock((clientId, storeJwt) => {
+      t.falsy(storeJwt)
+      return Promise.resolve(JWT)
+    })
+  })
+
+  return commonLogin.login(t.context.clientName)
+})
+
+test('login() should leave the storeJwt option as true is set to true', (t) => {
+  const commonLogin = proxyquire(TEST_SUBJECT, {
+    '../auth0/client-factory.js': t.context.auth0ClientFactory,
+    '../login-providers/username.js': t.context.usernameLoginProvider,
+    '../login-providers/email.js': t.context.emailLoginProvider,
+    '../login-providers/sms.js': t.context.smsLoginProvider,
+    '../login-providers/browser.js': loginProviderMock((clientId, storeJwt) => {
+      t.is(storeJwt, true)
+      return Promise.resolve(JWT)
+    })
+  })
+
+  return commonLogin.login(t.context.clientName, { storeJwt: true })
+})
+
+test('login() should leave the storeJwt option as false is set to false', (t) => {
+  const commonLogin = proxyquire(TEST_SUBJECT, {
+    '../auth0/client-factory.js': t.context.auth0ClientFactory,
+    '../login-providers/username.js': t.context.usernameLoginProvider,
+    '../login-providers/email.js': t.context.emailLoginProvider,
+    '../login-providers/sms.js': t.context.smsLoginProvider,
+    '../login-providers/browser.js': loginProviderMock((clientId, storeJwt) => {
+      t.is(storeJwt, false)
+      return Promise.resolve(JWT)
+    })
+  })
+
+  return commonLogin.login(t.context.clientName, { storeJwt: false })
 })
