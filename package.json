@@ -10,7 +10,7 @@
     "@blinkmobile/blinkmrc": "1.1.0",
     "base64url": "2.0.0",
     "inquirer": "3.2.2",
-    "jsonwebtoken": "7.4.2",
+    "jsonwebtoken": "7.4.3",
     "lodash.memoize": "4.1.2",
     "opn": "5.1.0",
     "request": "2.81.0"
@@ -24,7 +24,7 @@
     "eslint-plugin-promise": "^3.3.1",
     "eslint-plugin-standard": "^3.0.0",
     "fixpack": "^2.3.1",
-    "flow-bin": "^0.52.0",
+    "flow-bin": "^0.53.0",
     "jsdoc": "^3.4.2",
     "npm-run-all": "^4.0.0",
     "nyc": "^11.0.0",
