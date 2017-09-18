@@ -9,7 +9,7 @@
   "dependencies": {
     "@blinkmobile/blinkmrc": "1.1.0",
     "base64url": "2.0.0",
-    "inquirer": "3.2.3",
+    "inquirer": "3.3.0",
     "jsonwebtoken": "8.0.1",
     "lodash.memoize": "4.1.2",
     "opn": "5.1.0",
