@@ -108,22 +108,6 @@ blinkMobileIdentity.getAccessToken()
   });
 ```
 
-### Get Service Settings
-
-Service settings will be scoped to a specific BlinkMobile service.
-Properties may also be scoped to a project and/or the user that requests them.
-
-```js
-getServiceSettings (additionalParameters: Object) => Promise{Object}
-```
-
-```js
-blinkMobileIdentity.getServiceSettings()
-  .then(serviceSettings => {
-    // Use service settings
-  });
-```
-
 ### Manage Tenants
 
 Get and set the current tenant. Also get and remove list of previously used tenants.

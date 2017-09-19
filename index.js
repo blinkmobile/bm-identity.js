@@ -9,7 +9,6 @@ const profile = require('./lib/auth0/profile.js')
 const verifyJWT = require('./lib/auth0/verify-jwt.js')
 const auth0ClientFactory = require('./lib/auth0/client-factory.js')
 const getJWT = require('./lib/utils/get-jwt.js')
-const settings = require('./lib/common/settings.js')
 
 const privateVars = new WeakMap()
 
@@ -83,17 +82,6 @@ class BlinkMobileIdentity {
       auth0ClientFactory.getClientIdByName((privateVars.get(this) || {}).clientName)
     ])
       .then(([ jwt, clientId ]) => verifyJWT(jwt, clientId))
-  }
-
-  /**
-   * Get settings scoped to a BlinkMobile service.
-   * @param {Object} additionalParameters - Additional parameters to pass to the settings endpoint.
-   * @returns {Object} The settings.
-   */
-  getServiceSettings (
-    additionalParameters /* : Object */
-  ) /* : Promise<Object> */ {
-    return settings((privateVars.get(this) || {}).clientName, additionalParameters)
   }
 
   /**

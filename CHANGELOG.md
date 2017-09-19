@@ -10,6 +10,10 @@
     -   The access token stored is not a valid JWT
     -   The access token stored has expired
 
+### Removed
+
+-   AUTH-84: `getServiceSettings()` function
+
 ## 2.3.5 - 2017-05-29
 
 ### Dependencies
