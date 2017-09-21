@@ -5,6 +5,14 @@
 ### Breaking Changes
 
 -   ANALYTICS-125: Added login option `storeJwt` to store jwt on local file system. **This property will default to `false`**. This was the default behaviour in previous releases.
+-   AUTH-84: promise return from `getAccessToken()` will now reject if:
+    -   There is no access token stored on the local file system
+    -   The access token stored is not a valid JWT
+    -   The access token stored has expired
+
+### Removed
+
+-   AUTH-84: `getServiceSettings()` function
 
 ## 2.3.5 - 2017-05-29
 
