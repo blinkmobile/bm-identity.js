@@ -85,7 +85,7 @@ test.cb('requestJWT() request for jwt should use correct data and url', (t) => {
         password: PASSWORD,
         client_id: CLIENT_ID,
         grant_type: 'password',
-        scope: 'openid refreshIdTokenBeforeSeconds serviceSettingsUrl'
+        scope: 'openid refreshIdTokenBeforeSeconds serviceSettingsUrl email'
       })
       t.end()
       callback(null, {}, {})
