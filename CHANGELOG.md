@@ -2,9 +2,17 @@
 
 ## Unreleased
 
+## 3.1.0 - 2017-10-19
+
 ### Added
 
 -   `email` scope to requests to get Access Tokens from Auth0
+
+### Dependencies
+
+-   update [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) to [8.1.0](https://github.com/auth0/node-jsonwebtoken/blob/master/CHANGELOG.md) (from [8.0.1](https://github.com/auth0/node-jsonwebtoken/blob/master/CHANGELOG.md))
+
+-   update [request](https://www.npmjs.com/package/request) to [2.83.0](https://github.com/request/request/blob/master/CHANGELOG.md) (from [2.82.0](https://github.com/request/request/blob/master/CHANGELOG.md))
 
 ## 3.0.0 - 2017-09-22
 
