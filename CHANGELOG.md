@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+-   `email` scope to requests to get Access Tokens from Auth0
+
 ## 3.0.0 - 2017-09-22
 
 ### Breaking Changes
@@ -15,6 +19,18 @@
 ### Removed
 
 -   AUTH-84: `getServiceSettings()` function
+
+### Dependencies
+
+-   no longer depend upon [aws-sdk](https://www.npmjs.com/package/aws-sdk)
+
+-   update [inquirer](https://www.npmjs.com/package/inquirer) to [3.3.0](https://github.com/SBoudrias/Inquirer.js/releases/tag/v3.3.0) (from [3.0.6](https://github.com/SBoudrias/Inquirer.js/releases/tag/v3.0.6))
+
+-   update [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) to [8.0.1](https://github.com/auth0/node-jsonwebtoken/blob/master/CHANGELOG.md) (from [7.4.1](https://github.com/auth0/node-jsonwebtoken/blob/master/CHANGELOG.md))
+
+-   update [opn](https://www.npmjs.com/package/opn) to 5.1.0 (from 5.0.0)
+
+-   update [request](https://www.npmjs.com/package/request) to [2.82.0](https://github.com/request/request/blob/master/CHANGELOG.md) (from [2.81.0](https://github.com/request/request/blob/master/CHANGELOG.md))
 
 ## 2.3.5 - 2017-05-29
 
