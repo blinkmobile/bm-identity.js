@@ -2,9 +2,15 @@
 
 ## Unreleased
 
+## 3.2.0 - 2018-01-10
+
 ### Added
 
 -   API-116: check for environment variables to use to create JWT instead of checking local file system.
+
+### Dependencies
+
+-   update [inquirer](https://www.npmjs.com/package/inquirer) to [5.0.0](https://github.com/SBoudrias/Inquirer.js/releases/tag/v5.0.0) (from [3.3.0](https://github.com/SBoudrias/Inquirer.js/releases/tag/v3.3.0))
 
 ## 3.1.0 - 2017-10-19
 
