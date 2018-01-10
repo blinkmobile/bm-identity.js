@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+-   API-116: check for environment variables to use to create JWT instead of checking local file system.
+
 ## 3.1.0 - 2017-10-19
 
 ### Added

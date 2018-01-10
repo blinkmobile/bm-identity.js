@@ -1,6 +1,8 @@
 /* @flow */
 'use strict'
 
+const jwt = require('jsonwebtoken')
+
 const assumeRole = require('./lib/aws/assume-role.js')
 const loginCommon = require('./lib/common/login.js')
 const logoutCommon = require('./lib/common/logout.js')
@@ -77,6 +79,13 @@ class BlinkMobileIdentity {
    * @returns {String} The access token generated after a successful login.
    */
   getAccessToken () /* : Promise<string> */ {
+    if (process.env.BLINKM_ACCESS_KEY && process.env.BLINKM_SECRET_KEY) {
+      const expiryInMS = Date.now() + 1000 * 60 * 15 // expires in 15 minutes
+      return Promise.resolve(jwt.sign({
+        iss: process.env.BLINKM_ACCESS_KEY,
+        exp: Math.floor(expiryInMS / 1000) // exp claim should be in seconds, not milliseconds
+      }, process.env.BLINKM_SECRET_KEY))
+    }
     return Promise.all([
       getJWT(),
       auth0ClientFactory.getClientIdByName((privateVars.get(this) || {}).clientName)

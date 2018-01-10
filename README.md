@@ -95,7 +95,16 @@ blinkMobileIdentity.getProfile()
 
 ### Get Access Token
 
-To retrieve the access token stored after a successful login:
+To create an `AccessToken` using BlinkM Deployment Keys or retrieve the `AccessToken` stored after a successful login:
+
+#### Using Deployment Keys
+
+If the following environment variables are set:
+
+-   `BLINKM_ACCESS_KEY`
+-   `BLINKM_SECRET_KEY`
+
+These will be used to create an `AccessToken`
 
 ```js
 getAccessToken () => Promise{string}
