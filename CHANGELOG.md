@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 3.3.0 - 2018-01-24
+
 ### Added
 
 -   `getPayload` function for getting Access Token payload
