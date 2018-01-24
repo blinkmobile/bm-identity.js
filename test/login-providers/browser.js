@@ -74,7 +74,7 @@ test.cb('login() should call opn with correct data in url', (t) => {
     'opn': (url, options) => {
       const expectedQS = querystring.stringify({
         response_type: 'code',
-        scope: 'openid refreshIdTokenBeforeSeconds serviceSettingsUrl email',
+        scope: constants.SCOPE,
         client_id: CLIENT_ID,
         redirect_uri: constants.AUTH0_CALLBACK_URL,
         code_challenge: VERIFIER_CHALLENGE,

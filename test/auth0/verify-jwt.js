@@ -13,11 +13,11 @@ const constants = require('../../lib/constants.js')
 const JWT = 'a valid jwt'
 const CLIENT_ID = 'valid client id'
 const DECODED = {
-  exp: (Date.now() / 1000) + 43200, // 12 hours after tests are run
-  refreshIdTokenBeforeSeconds: 86400 // 24 hours
+  exp: (Date.now() / 1000) + 43200 // 12 hours after tests are run
 }
 const DATA = {
-  id_token: JWT
+  id_token: JWT,
+  access_token: JWT
 }
 
 test.beforeEach((t) => {
@@ -34,7 +34,9 @@ test.beforeEach((t) => {
 
       '../utils/user-config.js': userConfigStoreMock(null, (updateFn) => {
         return Promise.resolve(updateFn({}))
-      })
+      }),
+
+      '../utils/get-refresh-token.js': () => Promise.resolve('123abc')
     }, overrides))
   }
 })
@@ -84,33 +86,20 @@ test('verifyJWT() should reject if decode() does not return an object with an ex
     })
 })
 
-test('verifyJWT() should reject if jwt is expired', (t) => {
-  t.plan(1)
+test('verifyJWT() should call request.post() if jwt is expired', (t) => {
+  t.plan(2)
   const verifyJWT = t.context.getTestSubject({
     'jsonwebtoken': jsonwebtokenMock((jwt) => {
       return {
         exp: (Date.now() / 1000) - 1 // 1 second before test is run (expired)
       }
-    })
-  })
-
-  return verifyJWT(JWT, CLIENT_ID)
-    .catch((error) => {
-      t.deepEqual(error, new Error('Unauthorised, your access token has expired. Please login again.'))
-    })
-})
-
-test('verifyJWT() should call request.post() if jwt expires after a certain period', (t) => {
-  t.plan(2)
-  const verifyJWT = t.context.getTestSubject({
+    }),
     'request': requestMock((url, body, callback) => {
-      t.is(url, `${constants.AUTH0_URL}/delegation`)
+      t.is(url, `${constants.AUTH0_URL}/oauth/token`)
       t.deepEqual(body.json, {
         client_id: CLIENT_ID,
-        id_token: JWT,
-        scope: 'passthrough',
-        grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-        api_type: 'auth0'
+        refresh_token: '123abc',
+        grant_type: 'refresh_token'
       })
       callback(null, {}, {})
     })
@@ -121,6 +110,11 @@ test('verifyJWT() should call request.post() if jwt expires after a certain peri
 
 test('verifyJWT() should reject if request.post() returns an error', (t) => {
   const verifyJWT = t.context.getTestSubject({
+    'jsonwebtoken': jsonwebtokenMock((jwt) => {
+      return {
+        exp: (Date.now() / 1000) - 1 // 1 second before test is run (expired)
+      }
+    }),
     'request': requestMock((url, body, callback) => {
       callback(new Error('Test error message'))
     })
@@ -132,6 +126,11 @@ test('verifyJWT() should reject if request.post() returns an error', (t) => {
 test('verifyJWT() should reject if request.post() returns an error in the body', (t) => {
   t.plan(1)
   const verifyJWT = t.context.getTestSubject({
+    'jsonwebtoken': jsonwebtokenMock((jwt) => {
+      return {
+        exp: (Date.now() / 1000) - 1 // 1 second before test is run (expired)
+      }
+    }),
     'request': requestMock((url, body, callback) => {
       callback(null, {}, {
         error: 'error code',
@@ -149,10 +148,16 @@ test('verifyJWT() should reject if request.post() returns an error in the body',
 test('verifyJWT() should call userConfigStore.update() to save the jwt', (t) => {
   t.plan(1)
   const verifyJWT = t.context.getTestSubject({
+    'jsonwebtoken': jsonwebtokenMock((jwt) => {
+      return {
+        exp: (Date.now() / 1000) - 1 // 1 second before test is run (expired)
+      }
+    }),
     '../utils/user-config.js': userConfigStoreMock(null, (updateFn) => {
       const config = updateFn({})
       t.deepEqual(config, {
-        accessToken: JWT
+        access_token: JWT,
+        id_token: JWT
       })
       return Promise.resolve()
     })

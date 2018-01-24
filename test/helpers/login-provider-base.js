@@ -2,10 +2,9 @@
 
 const privateVars = new WeakMap()
 
-function loginProviderBaseMock (storeJwtFn, requestJwtFn, promptForCodeFn) {
+function loginProviderBaseMock (storeJwtFn, requestJwtFn) {
   storeJwtFn = storeJwtFn || ((jwt) => Promise.resolve(jwt))
   requestJwtFn = requestJwtFn || ((u, p, c) => Promise.resolve('jwt'))
-  promptForCodeFn = promptForCodeFn || ((m, u, c) => Promise.resolve('jwt'))
   return class LoginProvider {
     constructor (clientId, clientName) {
       privateVars.set(this, {
@@ -20,10 +19,6 @@ function loginProviderBaseMock (storeJwtFn, requestJwtFn, promptForCodeFn) {
 
     requestJWT (username, password, connection) {
       return requestJwtFn(username, password, connection)
-    }
-
-    promptForCode (message, username, connection) {
-      return promptForCodeFn(message, username, connection)
     }
   }
 }

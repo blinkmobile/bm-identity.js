@@ -28,8 +28,6 @@ login (options: LoginOptions) => Promise{String}
 interface LoginOptions {
   username? : String|Boolean, // Can also pass true, and username will be prompted for
   password? : String, // Will be prompted for password if username is truthy
-  email? : String|Boolean, // Can also pass true to be prompted for email address
-  sms? : String|Boolean, // Can also pass true to be prompted for phone number
   storeJwt? : Boolean, // Set to true to store jwt on local file system, defaults to false
 }
 ```
@@ -73,23 +71,6 @@ interface AssumedRoleCredentials {
 blinkMobileIdentity.assumeAWSRole()
   .then(credentials => {
     // Use AWS credentials
-  });
-```
-
-### Get Profile
-
-If `accessToken` is not passed, will attempt to get the access token from the file system.
-
-See [Auth0 Profile Structure](https://auth0.com/docs/user-profile/user-profile-structure) for available properties.
-
-```js
-getProfile (accessToken: String | undefined) => Promise{Auth0Profile}
-```
-
-```js
-blinkMobileIdentity.getProfile()
-  .then(profile => {
-    // Use Auth0 profile
   });
 ```
 
