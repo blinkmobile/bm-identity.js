@@ -117,6 +117,22 @@ blinkMobileIdentity.getAccessToken()
   });
 ```
 
+### Get Access Token Payload
+
+Helper function to get the payload for a JWT
+
+```js
+getPayload () => Promise{Object}
+```
+
+```js
+blinkMobileIdentity.getPayload()
+  .then(payload => {
+    // Use payload
+  });
+```
+
+
 ### Manage Tenants
 
 Get and set the current tenant. Also get and remove list of previously used tenants.

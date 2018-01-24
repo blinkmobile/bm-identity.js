@@ -93,6 +93,14 @@ class BlinkMobileIdentity {
       .then(([ jwt, clientId ]) => verifyJWT(jwt, clientId))
   }
 
+  getPayload (
+    accessToken /* : string | void */
+  ) /* : Promise<Object> */ {
+    return Promise.resolve()
+      .then(() => accessToken || this.getAccessToken())
+      .then((accessToken) => jwt.decode(accessToken))
+  }
+
   /**
    * Show the currently set and available tenants.
    * @param {String} clientName - The name of a Client.
