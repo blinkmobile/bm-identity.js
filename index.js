@@ -126,7 +126,8 @@ export type AWSCredentials = {
 export type LoginOptions = {
   password?: string,
   username?: string | true,
-  storeJwt?: boolean
+  storeJwt?: boolean,
+  refreshToken?: boolean
 }
 
 export type Tenants = {

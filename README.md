@@ -29,6 +29,7 @@ interface LoginOptions {
   username? : String|Boolean, // Can also pass true, and username will be prompted for
   password? : String, // Will be prompted for password if username is truthy
   storeJwt? : Boolean, // Set to true to store jwt on local file system, defaults to false
+  refreshToken? : Boolean, // Set to true will request a refresh token as well as an access token
 }
 ```
 
