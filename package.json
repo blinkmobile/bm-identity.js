@@ -58,7 +58,7 @@
     "flow_check": "flow check",
     "make-docs": "jsdoc index.js ./lib -r -d ./jsdocs",
     "nyc": "nyc check-coverage",
-    "posttest": "npm run nyc && npm run eslint && npm run flow_check",
+    "posttest": "npm run eslint && npm run flow_check",
     "pretest": "npm run fixpack",
     "test": "npm run ava"
   }

@@ -118,7 +118,6 @@ test.cb('login() loginProviderBase should contain username and password from pro
     './login-provider-base.js': loginProviderBaseMock(null, (username, password, connection) => {
       t.is(username, USERNAME)
       t.is(password, PASSWORD)
-      t.is(connection, 'Username-Password-Authentication')
       t.end()
       return Promise.resolve(JWT)
     })

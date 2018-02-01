@@ -7,7 +7,6 @@ const assumeRole = require('./lib/aws/assume-role.js')
 const loginCommon = require('./lib/common/login.js')
 const logoutCommon = require('./lib/common/logout.js')
 const tenant = require('./lib/common/tenant.js')
-const profile = require('./lib/auth0/profile.js')
 const verifyJWT = require('./lib/auth0/verify-jwt.js')
 const auth0ClientFactory = require('./lib/auth0/client-factory.js')
 const getJWT = require('./lib/utils/get-jwt.js')
@@ -57,21 +56,6 @@ class BlinkMobileIdentity {
     additionalParameters /* : Object */
   ) /* : Promise<Object> */ {
     return assumeRole((privateVars.get(this) || {}).clientName, additionalParameters)
-  }
-
-  /**
-   * Get the Auth0 profile for the current user.
-   * @param {String} [accessToken] - The access token generated after a successful login. If not passed, will attempt to get the access token from the file system.
-   * @returns {Object} The Auth0 profile.
-   */
-  getProfile (
-    accessToken /* : string | void */
-  ) /* : Promise<Auth0Profile> */ {
-    if (accessToken) {
-      return profile.getByJWT(accessToken)
-    } else {
-      return profile.getByClient((privateVars.get(this) || {}).clientName)
-    }
   }
 
   /**
@@ -133,27 +117,6 @@ class BlinkMobileIdentity {
 module.exports = BlinkMobileIdentity
 
 /* ::
-export type Auth0Identity = {
-  user_id: string,
-  provider: string,
-  connection: string,
-  isSocial: boolean
-}
-
-export type Auth0Profile = {
-  email_verified: boolean,
-  email: string,
-  clientID: string,
-  updated_at: string, // date
-  name: string,
-  picture: string, // url
-  user_id: string,
-  nickname: string,
-  identities: Auth0Identity[],
-  created_at: string, // date
-  global_client_id: string
-}
-
 export type AWSCredentials = {
   accessKeyId : string,
   secretAccessKey : string,
@@ -161,11 +124,10 @@ export type AWSCredentials = {
 }
 
 export type LoginOptions = {
-  email?: string | true,
   password?: string,
-  sms?: string | true,
   username?: string | true,
-  storeJwt?: boolean
+  storeJwt?: boolean,
+  refreshToken?: boolean
 }
 
 export type Tenants = {

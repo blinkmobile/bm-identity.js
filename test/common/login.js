@@ -20,14 +20,6 @@ test.beforeEach((t) => {
     return Promise.resolve(JWT)
   })
 
-  t.context.emailLoginProvider = loginProviderMock((clientId, email) => {
-    return Promise.resolve(JWT)
-  })
-
-  t.context.smsLoginProvider = loginProviderMock((clientId, phoneNumber) => {
-    return Promise.resolve(JWT)
-  })
-
   t.context.browserLoginProvider = loginProviderMock((clientId) => {
     return Promise.resolve(JWT)
   })
@@ -39,8 +31,6 @@ test.cb('login() should return valid jwt from provider', (t) => {
   const commonLogin = proxyquire(TEST_SUBJECT, {
     '../auth0/client-factory.js': t.context.auth0ClientFactory,
     '../login-providers/username.js': t.context.usernameLoginProvider,
-    '../login-providers/email.js': t.context.emailLoginProvider,
-    '../login-providers/sms.js': t.context.smsLoginProvider,
     '../login-providers/browser.js': t.context.browserLoginProvider
   })
 
@@ -63,8 +53,6 @@ test.cb('login() should call auth0ClientFactory with clientName from login', (t)
       return Promise.resolve(CLIENT_ID)
     }),
     '../login-providers/username.js': t.context.usernameLoginProvider,
-    '../login-providers/email.js': t.context.emailLoginProvider,
-    '../login-providers/sms.js': t.context.smsLoginProvider,
     '../login-providers/browser.js': t.context.browserLoginProvider
   })
 
@@ -85,16 +73,12 @@ test.cb('login() should create a usernameLoginProvider if all options are passed
       t.end()
       return Promise.resolve(JWT)
     }),
-    '../login-providers/email.js': t.context.emailLoginProvider,
-    '../login-providers/sms.js': t.context.smsLoginProvider,
     '../login-providers/browser.js': t.context.browserLoginProvider
   })
 
   commonLogin.login(t.context.clientName, {
     username: 'test',
-    password: 'pass',
-    email: 'email',
-    sms: '12345'
+    password: 'pass'
   })
     .catch(() => {
       t.fail()
@@ -112,110 +96,12 @@ test.cb('login() should create a usernameLoginProvider and call login() with nul
       t.end()
       return Promise.resolve(JWT)
     }),
-    '../login-providers/email.js': t.context.emailLoginProvider,
-    '../login-providers/sms.js': t.context.smsLoginProvider,
     '../login-providers/browser.js': t.context.browserLoginProvider
   })
 
   commonLogin.login(t.context.clientName, {
     username: true,
-    password: 'pass',
-    email: 'email',
-    sms: '12345'
-  })
-    .catch(() => {
-      t.fail()
-      t.end()
-    })
-})
-
-test.cb('login() should create an emailLoginProvider if all options but username are', (t) => {
-  const commonLogin = proxyquire(TEST_SUBJECT, {
-    '../auth0/client-factory.js': t.context.auth0ClientFactory,
-    '../login-providers/username.js': t.context.usernameLoginProvider,
-    '../login-providers/email.js': loginProviderMock((clientId, email) => {
-      t.is(clientId, CLIENT_ID)
-      t.is(email, 'email')
-      t.end()
-      return Promise.resolve(JWT)
-    }),
-    '../login-providers/sms.js': t.context.smsLoginProvider,
-    '../login-providers/browser.js': t.context.browserLoginProvider
-  })
-
-  commonLogin.login(t.context.clientName, {
-    email: 'email',
-    sms: '12345'
-  })
-    .catch(() => {
-      t.fail()
-      t.end()
-    })
-})
-
-test.cb('login() should create a emailLoginProvider and call login() with null if email is passed in as true', (t) => {
-  const commonLogin = proxyquire(TEST_SUBJECT, {
-    '../auth0/client-factory.js': t.context.auth0ClientFactory,
-    '../login-providers/username.js': t.context.usernameLoginProvider,
-    '../login-providers/email.js': loginProviderMock((clientId, email) => {
-      t.is(clientId, CLIENT_ID)
-      t.is(email, null)
-      t.end()
-      return Promise.resolve(JWT)
-    }),
-    '../login-providers/sms.js': t.context.smsLoginProvider,
-    '../login-providers/browser.js': t.context.browserLoginProvider
-  })
-
-  commonLogin.login(t.context.clientName, {
-    email: true,
-    sms: '12345'
-  })
-    .catch(() => {
-      t.fail()
-      t.end()
-    })
-})
-
-test.cb('login() should create an smsLoginProvider if only the sms option is passed', (t) => {
-  const commonLogin = proxyquire(TEST_SUBJECT, {
-    '../auth0/client-factory.js': t.context.auth0ClientFactory,
-    '../login-providers/username.js': t.context.usernameLoginProvider,
-    '../login-providers/email.js': t.context.emailLoginProvider,
-    '../login-providers/sms.js': loginProviderMock((clientId, phoneNumber) => {
-      t.is(clientId, CLIENT_ID)
-      t.is(phoneNumber, '12345')
-      t.end()
-      return Promise.resolve(JWT)
-    }),
-    '../login-providers/browser.js': t.context.browserLoginProvider
-  })
-
-  commonLogin.login(t.context.clientName, {
-    sms: '12345'
-  })
-    .catch(() => {
-      t.fail()
-      t.end()
-    })
-})
-
-test.cb('login() should create a smsLoginProvider and call login() with null if sms is passed in as true', (t) => {
-  const commonLogin = proxyquire(TEST_SUBJECT, {
-    '../auth0/client-factory.js': t.context.auth0ClientFactory,
-    '../login-providers/username.js': t.context.usernameLoginProvider,
-    '../login-providers/email.js': t.context.emailLoginProvider,
-    '../login-providers/sms.js': loginProviderMock((clientId, phoneNumber) => {
-      t.is(clientId, CLIENT_ID)
-      t.is(phoneNumber, null)
-      t.end()
-      return Promise.resolve(JWT)
-    }),
-    '../login-providers/browser.js': t.context.browserLoginProvider
-  })
-
-  commonLogin.login(t.context.clientName, {
-    sms: true
+    password: 'pass'
   })
     .catch(() => {
       t.fail()
@@ -227,8 +113,6 @@ test.cb('login() should create an browserLoginProvider if no option are passed',
   const commonLogin = proxyquire(TEST_SUBJECT, {
     '../auth0/client-factory.js': t.context.auth0ClientFactory,
     '../login-providers/username.js': t.context.usernameLoginProvider,
-    '../login-providers/email.js': t.context.emailLoginProvider,
-    '../login-providers/sms.js': t.context.smsLoginProvider,
     '../login-providers/browser.js': loginProviderMock((clientId, phoneNumber) => {
       t.is(clientId, CLIENT_ID)
       t.end()
@@ -247,8 +131,6 @@ test('login() should set the correct default for storeJwt option', (t) => {
   const commonLogin = proxyquire(TEST_SUBJECT, {
     '../auth0/client-factory.js': t.context.auth0ClientFactory,
     '../login-providers/username.js': t.context.usernameLoginProvider,
-    '../login-providers/email.js': t.context.emailLoginProvider,
-    '../login-providers/sms.js': t.context.smsLoginProvider,
     '../login-providers/browser.js': loginProviderMock((clientId, storeJwt) => {
       t.falsy(storeJwt)
       return Promise.resolve(JWT)
@@ -262,8 +144,6 @@ test('login() should leave the storeJwt option as true is set to true', (t) => {
   const commonLogin = proxyquire(TEST_SUBJECT, {
     '../auth0/client-factory.js': t.context.auth0ClientFactory,
     '../login-providers/username.js': t.context.usernameLoginProvider,
-    '../login-providers/email.js': t.context.emailLoginProvider,
-    '../login-providers/sms.js': t.context.smsLoginProvider,
     '../login-providers/browser.js': loginProviderMock((clientId, storeJwt) => {
       t.is(storeJwt, true)
       return Promise.resolve(JWT)
@@ -277,8 +157,6 @@ test('login() should leave the storeJwt option as false is set to false', (t) =>
   const commonLogin = proxyquire(TEST_SUBJECT, {
     '../auth0/client-factory.js': t.context.auth0ClientFactory,
     '../login-providers/username.js': t.context.usernameLoginProvider,
-    '../login-providers/email.js': t.context.emailLoginProvider,
-    '../login-providers/sms.js': t.context.smsLoginProvider,
     '../login-providers/browser.js': loginProviderMock((clientId, storeJwt) => {
       t.is(storeJwt, false)
       return Promise.resolve(JWT)

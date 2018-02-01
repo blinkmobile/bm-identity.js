@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+### Added
+
+-   `refreshToken` option to `login()` function
+
+### Removed
+
+-   `getProfile()` function
+-   `email` login provider
+-   `sms` login provider
+
 ## 3.3.0 - 2018-01-24
 
 ### Added
