@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 4.0.0 - 2018-02-01
+
 ### Added
 
 -   `refreshToken` option to `login()` function
