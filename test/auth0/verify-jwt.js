@@ -156,6 +156,7 @@ test('verifyJWT() should call userConfigStore.update() to save the jwt', (t) => 
     '../utils/user-config.js': userConfigStoreMock(null, (updateFn) => {
       const config = updateFn({})
       t.deepEqual(config, {
+        accessToken: JWT,
         access_token: JWT,
         id_token: JWT
       })
