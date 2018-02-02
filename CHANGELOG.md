@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 4.0.1 - 2018-02-02
+
+### Fixed
+
+-   usage of `accessToken` as well as `id_token` to be backward compatible
+
 ## 4.0.0 - 2018-02-01
 
 ### Added
