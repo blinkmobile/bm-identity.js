@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 4.0.2 - 2018-07-20
+
+### Dependencies
+
+-   update [@blinkmobile/blinkmrc](https://www.npmjs.com/package/@blinkmobile/blinkmrc) to [2.0.0](https://github.com/blinkmobile/blinkmrc.js/releases/tag/2.0.0) (from [1.1.0](https://github.com/blinkmobile/blinkmrc.js/releases/tag/1.1.0))
+
+-   update [inquirer](https://www.npmjs.com/package/inquirer) to [5.1.0](https://github.com/SBoudrias/Inquirer.js/releases/tag/v5.1.0) (from [5.0.1](https://github.com/SBoudrias/Inquirer.js/releases/tag/v5.0.1))
+
 ## 4.0.1 - 2018-02-02
 
 ### Fixed
