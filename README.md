@@ -54,27 +54,6 @@ logout () => Promise
 blinkMobileIdentity.logout();
 ```
 
-### Assume AWS Role
-
-```js
-assumeAWSRole (additionalParameters: Object) => Promise{AssumedRoleCredentials}
-```
-
-```js
-interface AssumedRoleCredentials {
-  accessKeyId : String,
-  secretAccessKey : String,
-  sessionToken : String
-}
-```
-
-```js
-blinkMobileIdentity.assumeAWSRole()
-  .then(credentials => {
-    // Use AWS credentials
-  });
-```
-
 ### Get Access Token
 
 To create an `AccessToken` using BlinkM Deployment Keys or retrieve the `AccessToken` stored after a successful login:
@@ -111,46 +90,5 @@ getPayload () => Promise{Object}
 blinkMobileIdentity.getPayload()
   .then(payload => {
     // Use payload
-  });
-```
-
-
-### Manage Tenants
-
-Get and set the current tenant. Also get and remove list of previously used tenants.
-
-```js
-getTenants () => Promise{Tenants}
-```
-
-```js
-setTenant (tenantName: String) => Promise{Tenants}
-```
-
-```js
-removeTenant (tenantName: String) => Promise{Tenants}
-```
-
-```js
-interface Tenants {
-  current : String,
-  previous : Array{String}
-}
-```
-
-```js
-blinkMobileIdentity.getTenants()
-  .then(tenants => {
-    // Use tenants
-  });
-
-blinkMobileIdentity.setTenant('TenantName')
-  .then(tenants => {
-    // Tenant was set
-  });
-
-blinkMobileIdentity.removeTenant('TenantName')
-  .then(tenants => {
-    // Tenant was removed
   });
 ```

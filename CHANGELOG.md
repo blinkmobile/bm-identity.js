@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Removed
+
+-   the following functions:
+    -   `assumeAWSRole()`
+    -   `getTenants()`
+    -   `setTenant()`
+    -   `removeTenant()`
+
 ## 4.0.2 - 2018-07-20
 
 ### Dependencies
