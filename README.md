@@ -9,9 +9,8 @@ npm install @blinkmobile/bm-identity --save
 ```
 
 ```js
-const pkg = require('./package.json');
 const BlinkMobileIdentity = require('@blinkmobile/bm-identity');
-const blinkMobileIdentity = new BlinkMobileIdentity(pkg.name);
+const blinkMobileIdentity = new BlinkMobileIdentity();
 ```
 
 ## Usage

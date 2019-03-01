@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Changed
+
+-   changed from Auth0 to Cognito
+
 ### Removed
 
 -   the following functions:

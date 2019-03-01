@@ -1,3 +1,4 @@
+// @flow
 'use strict'
 
 const test = require('ava')
@@ -12,14 +13,14 @@ const base64urlMock = require('../helpers/base-64-url.js')
 const TEST_SUBJECT = '../../lib/login-providers/browser.js'
 const constants = require('../../lib/constants.js')
 
-const CLIENT_ID = 'valid client id'
 const JWT = 'valid jwt'
 const CODE = 'abc123'
 const VERIFIER_CHALLENGE = 'verifier challenge'
 
 test.beforeEach((t) => {
   t.context.log = console.log
-  console.log = function (content) {}
+  // $FlowFixMe
+  console.log = function (content) { }
 
   t.context.loginProviderBase = loginProviderBaseMock((jwt) => {
     return Promise.resolve(jwt)
@@ -37,12 +38,13 @@ test.beforeEach((t) => {
     })
   })
 
-  t.context.opn = (url, options) => {}
+  t.context.opn = (url, options) => { }
 
   t.context.base64url = base64urlMock((bytes) => VERIFIER_CHALLENGE)
 })
 
 test.afterEach(t => {
+  // $FlowFixMe
   console.log = t.context.log
 })
 
@@ -54,7 +56,7 @@ test.cb('login() should return valid jwt', (t) => {
     'base64url': t.context.base64url,
     './login-provider-base.js': t.context.loginProviderBase
   })
-  const browserLoginProvider = new BrowserLoginProvider(CLIENT_ID)
+  const browserLoginProvider = new BrowserLoginProvider()
 
   browserLoginProvider.login()
     .then((jwt) => {
@@ -75,12 +77,12 @@ test.cb('login() should call opn with correct data in url', (t) => {
       const expectedQS = querystring.stringify({
         response_type: 'code',
         scope: constants.SCOPE,
-        client_id: CLIENT_ID,
-        redirect_uri: constants.AUTH0_CALLBACK_URL,
+        client_id: constants.LOGIN_CLIENT_ID,
+        redirect_uri: constants.LOGIN_CALLBACK_URL,
         code_challenge: VERIFIER_CHALLENGE,
         code_challenge_method: 'S256'
       })
-      t.is(url, `${constants.AUTH0_URL}/authorize?${expectedQS}`)
+      t.is(url, `${constants.LOGIN_URL}/authorize?${expectedQS}`)
       t.deepEqual(options, {
         wait: false
       })
@@ -89,7 +91,7 @@ test.cb('login() should call opn with correct data in url', (t) => {
     'base64url': t.context.base64url,
     './login-provider-base.js': t.context.loginProviderBase
   })
-  const browserLoginProvider = new BrowserLoginProvider(CLIENT_ID)
+  const browserLoginProvider = new BrowserLoginProvider()
 
   browserLoginProvider.login()
     .catch((error) => {
@@ -106,8 +108,9 @@ test.cb('login() should log a message to the console', (t) => {
     'base64url': t.context.base64url,
     './login-provider-base.js': t.context.loginProviderBase
   })
-  const browserLoginProvider = new BrowserLoginProvider(CLIENT_ID)
+  const browserLoginProvider = new BrowserLoginProvider()
 
+  // $FlowFixMe
   console.log = function (content) {
     t.is(content, 'A browser has been opened to allow you to login. Once logged in, you will be granted a verification code.')
   }
@@ -141,7 +144,7 @@ test.cb('login() should prompt with the correct question', (t) => {
     'base64url': t.context.base64url,
     './login-provider-base.js': t.context.loginProviderBase
   })
-  const browserLoginProvider = new BrowserLoginProvider(CLIENT_ID)
+  const browserLoginProvider = new BrowserLoginProvider()
 
   browserLoginProvider.login()
     .catch((error) => {
@@ -154,13 +157,13 @@ test.cb('login() should make request with the correct url and data', (t) => {
   const BrowserLoginProvider = proxyquire(TEST_SUBJECT, {
     'inquirer': t.context.inquirer,
     'request': requestMock((url, body, callback) => {
-      t.is(url, `${constants.AUTH0_URL}/oauth/token`)
-      t.deepEqual(body.json, {
+      t.is(url, `${constants.LOGIN_URL}/oauth2/token`)
+      t.deepEqual(body.form, {
         code: CODE,
         code_verifier: VERIFIER_CHALLENGE,
-        client_id: CLIENT_ID,
+        client_id: constants.LOGIN_CLIENT_ID,
         grant_type: 'authorization_code',
-        redirect_uri: constants.AUTH0_CALLBACK_URL
+        redirect_uri: constants.LOGIN_CALLBACK_URL
       })
       t.end()
       callback(null, {}, {})
@@ -169,7 +172,7 @@ test.cb('login() should make request with the correct url and data', (t) => {
     'base64url': t.context.base64url,
     './login-provider-base.js': t.context.loginProviderBase
   })
-  const browserLoginProvider = new BrowserLoginProvider(CLIENT_ID)
+  const browserLoginProvider = new BrowserLoginProvider()
 
   browserLoginProvider.login()
     .catch((error) => {
@@ -179,6 +182,7 @@ test.cb('login() should make request with the correct url and data', (t) => {
 })
 
 test('login() should should reject if request returns an error', (t) => {
+  t.plan(1)
   const BrowserLoginProvider = proxyquire(TEST_SUBJECT, {
     'inquirer': t.context.inquirer,
     'request': requestMock((url, body, callback) => {
@@ -188,9 +192,12 @@ test('login() should should reject if request returns an error', (t) => {
     'base64url': t.context.base64url,
     './login-provider-base.js': t.context.loginProviderBase
   })
-  const browserLoginProvider = new BrowserLoginProvider(CLIENT_ID)
+  const browserLoginProvider = new BrowserLoginProvider()
 
-  return t.throws(browserLoginProvider.login(), 'Test error message')
+  return browserLoginProvider.login()
+    .catch((error) => {
+      t.deepEqual(error, new Error('Test error message'))
+    })
 })
 
 test.cb('login() should should reject if request returns an error in the body', (t) => {
@@ -206,7 +213,7 @@ test.cb('login() should should reject if request returns an error in the body', 
     'base64url': t.context.base64url,
     './login-provider-base.js': t.context.loginProviderBase
   })
-  const browserLoginProvider = new BrowserLoginProvider(CLIENT_ID)
+  const browserLoginProvider = new BrowserLoginProvider()
 
   browserLoginProvider.login()
     .then(() => {
