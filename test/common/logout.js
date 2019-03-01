@@ -16,7 +16,7 @@ const JWT = 'a valid jwt'
 
 test.beforeEach((t) => {
   t.context.userConfigStore = userConfigStoreMock(null, (updateFn, options) => {
-    return Promise.resolve(updateFn({accessToken: JWT}))
+    return Promise.resolve(updateFn({ accessToken: JWT }))
   })
 
   t.context.auth0ClientFactory = auth0ClientFactoryMock(() => {
@@ -95,7 +95,7 @@ test.cb('logout() should call userConfigStore.update() to update and remove acce
     '../utils/user-config.js': userConfigStoreMock(null, (updateFn) => {
       t.pass()
       t.end()
-      return Promise.resolve(updateFn({accessToken: JWT}))
+      return Promise.resolve(updateFn({ accessToken: JWT }))
     })
   })
 

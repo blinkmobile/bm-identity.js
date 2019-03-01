@@ -17,7 +17,7 @@ const CONNECTION = 'username-password'
 
 test.beforeEach((t) => {
   t.context.userConfigStore = userConfigStoreMock(() => {
-    return Promise.resolve({accessToken: JWT})
+    return Promise.resolve({ accessToken: JWT })
   })
 
   t.context.request = requestMock((url, data, callback) => {

@@ -125,7 +125,7 @@ test.cb('assumeRole() should call tenant.get() to get current tenant', (t) => {
       get: () => {
         t.pass()
         t.end()
-        return Promise.resolve({tenants: TENANTS})
+        return Promise.resolve({ tenants: TENANTS })
       }
     }
   })
