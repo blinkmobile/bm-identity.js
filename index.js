@@ -3,66 +3,38 @@
 
 const jwt = require('jsonwebtoken')
 
-const assumeRole = require('./lib/aws/assume-role.js')
-const loginCommon = require('./lib/common/login.js')
-const logoutCommon = require('./lib/common/logout.js')
-const tenant = require('./lib/common/tenant.js')
-const verifyJWT = require('./lib/auth0/verify-jwt.js')
-const auth0ClientFactory = require('./lib/auth0/client-factory.js')
+const login = require('./lib/common/login.js')
+const logout = require('./lib/common/logout.js')
+const verifyJWT = require('./lib/utils/verify-jwt.js')
 const getJWT = require('./lib/utils/get-jwt.js')
-
-const privateVars = new WeakMap()
 
 /**
  * Class representing a Blink Mobile identity.
  */
 class BlinkMobileIdentity {
   /**
-   * Create a Blink Mobile identity.
-   * @param {String} clientName - The name of the client.
-   */
-  constructor (
-    clientName /* : string */
-  ) {
-    privateVars.set(this, {
-      clientName
-    })
-  }
-
-  /**
    * Login to a client using a Blink Mobile identity.
    * @param {Object} options - The login options.
    * @returns {String} The JWT generated after a successful login.
    */
-  login (
-    options /* : LoginOptions */
+  async login (
+    options /* : ?LoginOptions */
   ) /* : Promise<string> */ {
-    return loginCommon.login((privateVars.get(this) || {}).clientName || '', options)
+    return login(options)
   }
 
   /**
    * Logout of the client.
    */
-  logout () /* : Promise<void> */ {
-    return logoutCommon.logout((privateVars.get(this) || {}).clientName)
-  }
-
-  /**
-   * Get temporary AWS role's credentials.
-   * @param {Object} Additional parameters to pass to the delegation endpoint.
-   * @returns {Object} The AWS credentials.
-   */
-  assumeAWSRole (
-    additionalParameters /* : Object */
-  ) /* : Promise<Object> */ {
-    return assumeRole((privateVars.get(this) || {}).clientName, additionalParameters)
+  async logout () /* : Promise<void> */ {
+    return logout()
   }
 
   /**
    * Get access token generated after a successful login
    * @returns {String} The access token generated after a successful login.
    */
-  getAccessToken () /* : Promise<string> */ {
+  async getAccessToken () /* : Promise<string> */ {
     if (process.env.BLINKM_ACCESS_KEY && process.env.BLINKM_SECRET_KEY) {
       const expiryInMS = Date.now() + 1000 * 60 * 15 // expires in 15 minutes
       return Promise.resolve(jwt.sign({
@@ -70,69 +42,25 @@ class BlinkMobileIdentity {
         exp: Math.floor(expiryInMS / 1000) // exp claim should be in seconds, not milliseconds
       }, process.env.BLINKM_SECRET_KEY))
     }
-    return Promise.all([
-      getJWT(),
-      auth0ClientFactory.getClientIdByName((privateVars.get(this) || {}).clientName)
-    ])
-      .then(([ jwt, clientId ]) => verifyJWT(jwt, clientId))
+    const token = await getJWT()
+    return verifyJWT(token)
   }
 
-  getPayload (
+  async getPayload (
     accessToken /* : string | void */
   ) /* : Promise<Object> */ {
-    return Promise.resolve()
-      .then(() => accessToken || this.getAccessToken())
-      .then((accessToken) => jwt.decode(accessToken))
-  }
-
-  /**
-   * Show the currently set and available tenants.
-   * @param {String} clientName - The name of a Client.
-   */
-  getTenants () /* : Promise<Tenants> */ {
-    return tenant.get()
-  }
-
-  /**
-   * Change the currently set tenant, will then show the currently set and available tenants.
-   * @param {String} tenantName - The name of a tenant to set.
-   */
-  setTenant (
-    tenantName /* : string */
-  ) /* : Promise<Tenants> */ {
-    return tenant.set(tenantName)
-  }
-
-  /**
-   * Remove a tenant from the available tenants, will then show the currently set and available tenants.
-   * @param {String} tenantName - The name of a tenant to remove.
-   */
-  removeTenant (
-    tenantName /* : string */
-  ) /* : Promise<Tenants> */ {
-    return tenant.remove(tenantName)
+    const token = accessToken || await this.getAccessToken()
+    return jwt.decode(token)
   }
 }
 
 module.exports = BlinkMobileIdentity
 
 /* ::
-export type AWSCredentials = {
-  accessKeyId : string,
-  secretAccessKey : string,
-  sessionToken : string
-}
-
 export type LoginOptions = {
   password?: string,
   username?: string | true,
-  storeJwt?: boolean,
-  refreshToken?: boolean
-}
-
-export type Tenants = {
-  current: string | void,
-  previous: string[]
+  storeJwt?: boolean
 }
 
 export type UserConfigStore = {

@@ -45,3 +45,4 @@ jsdocs/
 
 #VS Code
 .vscode
+local-tests
