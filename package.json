@@ -11,7 +11,7 @@
   ],
   "dependencies": {
     "@blinkmobile/blinkmrc": "2.0.0",
-    "aws-sdk": "2.412.0",
+    "aws-sdk": "2.415.0",
     "base64url": "3.0.1",
     "inquirer": "6.2.2",
     "jsonwebtoken": "8.5.0",
