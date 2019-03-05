@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 5.0.0 - 2019-03-05
+
 ### Changed
 
 -   changed from Auth0 to Cognito
@@ -13,6 +15,22 @@
     -   `getTenants()`
     -   `setTenant()`
     -   `removeTenant()`
+
+### Dependencies
+
+-   update [base64url](https://www.npmjs.com/package/base64url) to 3.0.1 (from 2.0.0)
+
+-   update [inquirer](https://www.npmjs.com/package/inquirer) to 6.2.2 (from [5.1.0](https://github.com/SBoudrias/Inquirer.js/releases/tag/v5.1.0))
+
+-   update [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) to [8.5.0](https://github.com/auth0/node-jsonwebtoken/blob/master/CHANGELOG.md) (from [8.1.1](https://github.com/auth0/node-jsonwebtoken/blob/master/CHANGELOG.md))
+
+-   no longer depend upon [lodash.memoize](https://www.npmjs.com/package/lodash.memoize)
+
+-   update [opn](https://www.npmjs.com/package/opn) to 5.4.0 (from 5.2.0)
+
+-   update [request](https://www.npmjs.com/package/request) to [2.88.0](https://github.com/request/request/blob/master/CHANGELOG.md) (from [2.83.0](https://github.com/request/request/blob/master/CHANGELOG.md))
+
+-   depend upon [aws-sdk](https://www.npmjs.com/package/aws-sdk) [2.412.0](https://github.com/aws/aws-sdk-js/releases/tag/v2.412.0)
 
 ## 4.0.2 - 2018-07-20
 
