@@ -9,8 +9,8 @@ npm install @blinkmobile/bm-identity --save
 ```
 
 ```js
-const BlinkMobileIdentity = require('@blinkmobile/bm-identity');
-const blinkMobileIdentity = new BlinkMobileIdentity();
+const BlinkMobileIdentity = require('@blinkmobile/bm-identity')
+const blinkMobileIdentity = new BlinkMobileIdentity()
 ```
 
 ## Usage
@@ -25,23 +25,22 @@ login (options: LoginOptions) => Promise{String}
 
 ```js
 interface LoginOptions {
-  username? : String|Boolean, // Can also pass true, and username will be prompted for
-  password? : String, // Will be prompted for password if username is truthy
-  storeJwt? : Boolean, // Set to true to store jwt on local file system, defaults to false
-  refreshToken? : Boolean, // Set to true will request a refresh token as well as an access token
+  username?: String | Boolean; // Can also pass true, and username will be prompted for
+  password?: String; // Will be prompted for password if username is truthy
+  storeJwt?: Boolean; // Set to true to store jwt on local file system, defaults to false
+  refreshToken?: Boolean; // Set to true will request a refresh token as well as an access token
 }
 ```
 
 ```js
-blinkMobileIdentity.login()
-  .then(jwt => {
-    // Use jwt access token.
-  });
+blinkMobileIdentity.login().then(jwt => {
+  // Use jwt access token.
+})
 ```
 
 #### `storeJwt` Option
 
--   If set to `true`, will use [@blinkmobile/blinkmrc User Config](https://www.npmjs.com/package/@blinkmobile/blinkmrc) to store on local file system for later use.
+- If set to `true`, will use [@blinkmobile/blinkmrc User Config](https://www.npmjs.com/package/@blinkmobile/blinkmrc) to store on local file system for later use.
 
 ### Logout
 
@@ -50,7 +49,7 @@ logout () => Promise
 ```
 
 ```js
-blinkMobileIdentity.logout();
+blinkMobileIdentity.logout()
 ```
 
 ### Get Access Token
@@ -61,8 +60,8 @@ To create an `AccessToken` using BlinkM Deployment Keys or retrieve the `AccessT
 
 If the following environment variables are set:
 
--   `BLINKM_ACCESS_KEY`
--   `BLINKM_SECRET_KEY`
+- `BLINKM_ACCESS_KEY`
+- `BLINKM_SECRET_KEY`
 
 These will be used to create an `AccessToken`
 
@@ -71,10 +70,9 @@ getAccessToken () => Promise{string}
 ```
 
 ```js
-blinkMobileIdentity.getAccessToken()
-  .then(jwt => {
-    // Use access token
-  });
+blinkMobileIdentity.getAccessToken().then(jwt => {
+  // Use access token
+})
 ```
 
 ### Get Access Token Payload
@@ -86,8 +84,7 @@ getPayload () => Promise{Object}
 ```
 
 ```js
-blinkMobileIdentity.getPayload()
-  .then(payload => {
-    // Use payload
-  });
+blinkMobileIdentity.getPayload().then(payload => {
+  // Use payload
+})
 ```
