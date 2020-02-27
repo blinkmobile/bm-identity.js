@@ -10,7 +10,7 @@ const TEST_SUBJECT = '../../lib/common/login.js'
 
 const JWT = 'valid jwt'
 
-test.beforeEach((t) => {
+test.beforeEach(t => {
   t.context.usernameLoginProvider = loginProviderMock((username, password) => {
     return Promise.resolve(JWT)
   })
@@ -20,14 +20,14 @@ test.beforeEach((t) => {
   })
 })
 
-test.cb('login() should return valid jwt from provider', (t) => {
+test.cb('login() should return valid jwt from provider', t => {
   const login = proxyquire(TEST_SUBJECT, {
     '../login-providers/username.js': t.context.usernameLoginProvider,
-    '../login-providers/browser.js': t.context.browserLoginProvider
+    '../login-providers/browser.js': t.context.browserLoginProvider,
   })
 
   login()
-    .then((jwt) => {
+    .then(jwt => {
       t.is(jwt, JWT)
       t.end()
     })
@@ -37,96 +37,106 @@ test.cb('login() should return valid jwt from provider', (t) => {
     })
 })
 
-test.cb('login() should create a usernameLoginProvider if all options are passed', (t) => {
-  const login = proxyquire(TEST_SUBJECT, {
-    '../login-providers/username.js': loginProviderMock((username, password) => {
-      t.is(username, 'test')
-      t.is(password, 'pass')
-      t.end()
-      return Promise.resolve(JWT)
-    }),
-    '../login-providers/browser.js': t.context.browserLoginProvider
-  })
+test.cb(
+  'login() should create a usernameLoginProvider if all options are passed',
+  t => {
+    const login = proxyquire(TEST_SUBJECT, {
+      '../login-providers/username.js': loginProviderMock(
+        (username, password) => {
+          t.is(username, 'test')
+          t.is(password, 'pass')
+          t.end()
+          return Promise.resolve(JWT)
+        },
+      ),
+      '../login-providers/browser.js': t.context.browserLoginProvider,
+    })
 
-  login({
-    username: 'test',
-    password: 'pass'
-  })
-    .catch(() => {
+    login({
+      username: 'test',
+      password: 'pass',
+    }).catch(() => {
       t.fail()
       t.end()
     })
-})
+  },
+)
 
-test.cb('login() should create a usernameLoginProvider and call login() with null if username is passed in as true', (t) => {
-  const login = proxyquire(TEST_SUBJECT, {
-    '../login-providers/username.js': loginProviderMock((username, password) => {
-      t.is(username, null)
-      t.is(password, 'pass')
-      t.end()
-      return Promise.resolve(JWT)
-    }),
-    '../login-providers/browser.js': t.context.browserLoginProvider
-  })
+test.cb(
+  'login() should create a usernameLoginProvider and call login() with null if username is passed in as true',
+  t => {
+    const login = proxyquire(TEST_SUBJECT, {
+      '../login-providers/username.js': loginProviderMock(
+        (username, password) => {
+          t.is(username, null)
+          t.is(password, 'pass')
+          t.end()
+          return Promise.resolve(JWT)
+        },
+      ),
+      '../login-providers/browser.js': t.context.browserLoginProvider,
+    })
 
-  login({
-    username: true,
-    password: 'pass'
-  })
-    .catch(() => {
+    login({
+      username: true,
+      password: 'pass',
+    }).catch(() => {
       t.fail()
       t.end()
     })
-})
+  },
+)
 
-test.cb('login() should create an browserLoginProvider if no option are passed', (t) => {
-  const login = proxyquire(TEST_SUBJECT, {
-    '../login-providers/username.js': t.context.usernameLoginProvider,
-    '../login-providers/browser.js': loginProviderMock(() => {
-      t.pass()
-      t.end()
-      return Promise.resolve(JWT)
+test.cb(
+  'login() should create an browserLoginProvider if no option are passed',
+  t => {
+    const login = proxyquire(TEST_SUBJECT, {
+      '../login-providers/username.js': t.context.usernameLoginProvider,
+      '../login-providers/browser.js': loginProviderMock(() => {
+        t.pass()
+        t.end()
+        return Promise.resolve(JWT)
+      }),
     })
-  })
 
-  login()
-    .catch(() => {
+    login().catch(() => {
       t.fail()
       t.end()
     })
-})
+  },
+)
 
-test('login() should set the correct default for storeJwt option', (t) => {
+test('login() should set the correct default for storeJwt option', t => {
   const login = proxyquire(TEST_SUBJECT, {
     '../login-providers/username.js': t.context.usernameLoginProvider,
     '../login-providers/browser.js': loginProviderMock((clientId, storeJwt) => {
       t.falsy(storeJwt)
       return Promise.resolve(JWT)
-    })
+    }),
   })
 
   return login()
 })
 
-test('login() should leave the storeJwt option as true is set to true', (t) => {
+test('login() should leave the storeJwt option as true is set to true', t => {
   const login = proxyquire(TEST_SUBJECT, {
     '../login-providers/username.js': t.context.usernameLoginProvider,
-    '../login-providers/browser.js': loginProviderMock((storeJwt) => {
+    '../login-providers/browser.js': loginProviderMock(storeJwt => {
       t.is(storeJwt, true)
       return Promise.resolve(JWT)
-    })
+    }),
   })
 
   return login({ storeJwt: true })
 })
 
-test('login() should leave the storeJwt option as false is set to false', (t) => {
+test('login() should leave the storeJwt option as false is set to false', t => {
   const login = proxyquire(TEST_SUBJECT, {
     '../login-providers/username.js': t.context.usernameLoginProvider,
-    '../login-providers/browser.js': loginProviderMock((storeJwt) => {
+    '../login-providers/browser.js': loginProviderMock(storeJwt => {
       t.is(storeJwt, false)
       return Promise.resolve(JWT)
-    })
+    }),
   })
 
   return login({ storeJwt: false })

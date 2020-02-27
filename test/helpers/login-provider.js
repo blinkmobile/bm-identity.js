@@ -1,8 +1,8 @@
 'use strict'
 
-function loginProviderMock (loginFn) {
+function loginProviderMock(loginFn) {
   return class LoginProvider {
-    login (a, b, c) {
+    login(a, b, c) {
       return loginFn(a, b, c)
     }
   }

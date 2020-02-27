@@ -1,9 +1,9 @@
 'use strict'
 
-function base64urlMock (encodeFn) {
-  encodeFn = encodeFn || ((bytes) => 'base 64 encoded url')
+function base64urlMock(encodeFn) {
+  encodeFn = encodeFn || (bytes => 'base 64 encoded url')
   return {
-    encode: encodeFn
+    encode: encodeFn,
   }
 }
 

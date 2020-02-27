@@ -14,35 +14,40 @@ const JWT = 'valid jwt'
 const USERNAME = 'username'
 const PASSWORD = 'password'
 
-test.beforeEach((t) => {
-  t.context.loginProviderBase = loginProviderBaseMock(null, (username, password, connection) => {
-    return Promise.resolve(JWT)
-  })
+test.beforeEach(t => {
+  t.context.loginProviderBase = loginProviderBaseMock(
+    null,
+    (username, password, connection) => {
+      return Promise.resolve(JWT)
+    },
+  )
 
   t.context.inquirer = inquirerMock()
 })
 
-test.cb('login() should return valid jwt', (t) => {
+test.cb('login() should return valid jwt', t => {
   const UsernameLoginProvider = proxyquire(TEST_SUBJECT, {
-    'inquirer': t.context.inquirer,
+    inquirer: t.context.inquirer,
     'aws-sdk': {
       CognitoIdentityServiceProvider: class {
-        initiateAuth () {
+        initiateAuth() {
           return {
-            promise: () => Promise.resolve({
-              AuthenticationResult: {
-                IdToken: JWT
-              }
-            })
+            promise: () =>
+              Promise.resolve({
+                AuthenticationResult: {
+                  IdToken: JWT,
+                },
+              }),
           }
         }
-      }
-    }
+      },
+    },
   })
   const usernameLoginProvider = new UsernameLoginProvider(CLIENT_ID)
 
-  usernameLoginProvider.login(USERNAME, PASSWORD)
-    .then((jwt) => {
+  usernameLoginProvider
+    .login(USERNAME, PASSWORD)
+    .then(jwt => {
       t.is(jwt, JWT)
       t.end()
     })
@@ -52,106 +57,123 @@ test.cb('login() should return valid jwt', (t) => {
     })
 })
 
-test.cb('login() should ask for username and password if username and password is not passed in', (t) => {
-  t.plan(3)
-  const UsernameLoginProvider = proxyquire(TEST_SUBJECT, {
-    'inquirer': inquirerMock((questions) => {
-      t.truthy(questions.find(question => question.name === 'username'))
-      t.truthy(questions.find(question => question.name === 'password'))
-      t.is(questions.length, 2)
-      return Promise.resolve(questions.reduce((memo, question) => {
-        memo[question.name] = question.name
-        return memo
-      }, {}))
-    }),
-    'aws-sdk': {
-      CognitoIdentityServiceProvider: class {
-        initiateAuth () {
-          return {
-            promise: () => Promise.resolve({
-              AuthenticationResult: {
-                IdToken: JWT
-              }
-            })
+test.cb(
+  'login() should ask for username and password if username and password is not passed in',
+  t => {
+    t.plan(3)
+    const UsernameLoginProvider = proxyquire(TEST_SUBJECT, {
+      inquirer: inquirerMock(questions => {
+        t.truthy(questions.find(question => question.name === 'username'))
+        t.truthy(questions.find(question => question.name === 'password'))
+        t.is(questions.length, 2)
+        return Promise.resolve(
+          questions.reduce((memo, question) => {
+            memo[question.name] = question.name
+            return memo
+          }, {}),
+        )
+      }),
+      'aws-sdk': {
+        CognitoIdentityServiceProvider: class {
+          initiateAuth() {
+            return {
+              promise: () =>
+                Promise.resolve({
+                  AuthenticationResult: {
+                    IdToken: JWT,
+                  },
+                }),
+            }
           }
-        }
-      }
-    }
-  })
-  const usernameLoginProvider = new UsernameLoginProvider(CLIENT_ID)
-
-  usernameLoginProvider.login()
-    .then(() => {
-      t.end()
+        },
+      },
     })
-    .catch((e) => {
-      t.fail()
-      t.end()
-    })
-})
+    const usernameLoginProvider = new UsernameLoginProvider(CLIENT_ID)
 
-test.cb('login() should should reject if username is not returned from the prompt', (t) => {
-  const UsernameLoginProvider = proxyquire(TEST_SUBJECT, {
-    'inquirer': inquirerMock((questions) => {
-      return Promise.resolve({})
-    }),
-    'aws-sdk': {
-      CognitoIdentityServiceProvider: class {
-        initiateAuth () {
-          return {
-            promise: () => Promise.resolve({
-              AuthenticationResult: {
-                IdToken: JWT
-              }
-            })
-          }
-        }
-      }
-    }
-  })
-  const usernameLoginProvider = new UsernameLoginProvider(CLIENT_ID)
-
-  usernameLoginProvider.login()
-    .then(() => {
-      t.fail()
-      t.end()
-    })
-    .catch(error => {
-      t.deepEqual(error, new Error('Please specify a username.'))
-      t.end()
-    })
-})
-
-test.cb('login() should should reject if password is not returned from the prompt', (t) => {
-  const UsernameLoginProvider = proxyquire(TEST_SUBJECT, {
-    'inquirer': inquirerMock((questions) => {
-      return Promise.resolve({
-        username: USERNAME
+    usernameLoginProvider
+      .login()
+      .then(() => {
+        t.end()
       })
-    }),
-    'aws-sdk': {
-      CognitoIdentityServiceProvider: class {
-        initiateAuth () {
-          return {
-            promise: () => Promise.resolve({
-              AuthenticationResult: {
-                IdToken: JWT
-              }
-            })
-          }
-        }
-      }
-    }
-  })
-  const usernameLoginProvider = new UsernameLoginProvider(CLIENT_ID)
+      .catch(e => {
+        t.fail()
+        t.end()
+      })
+  },
+)
 
-  usernameLoginProvider.login()
-    .then(() => {
-      t.fail()
-      t.end()
+test.cb(
+  'login() should should reject if username is not returned from the prompt',
+  t => {
+    const UsernameLoginProvider = proxyquire(TEST_SUBJECT, {
+      inquirer: inquirerMock(questions => {
+        return Promise.resolve({})
+      }),
+      'aws-sdk': {
+        CognitoIdentityServiceProvider: class {
+          initiateAuth() {
+            return {
+              promise: () =>
+                Promise.resolve({
+                  AuthenticationResult: {
+                    IdToken: JWT,
+                  },
+                }),
+            }
+          }
+        },
+      },
     })
-    .catch(error => {
-      t.deepEqual(error, new Error('Please specify a password.'))
-      t.end()
+    const usernameLoginProvider = new UsernameLoginProvider(CLIENT_ID)
+
+    usernameLoginProvider
+      .login()
+      .then(() => {
+        t.fail()
+        t.end()
+      })
+      .catch(error => {
+        t.deepEqual(error, new Error('Please specify a username.'))
+        t.end()
+      })
+  },
+)
+
+test.cb(
+  'login() should should reject if password is not returned from the prompt',
+  t => {
+    const UsernameLoginProvider = proxyquire(TEST_SUBJECT, {
+      inquirer: inquirerMock(questions => {
+        return Promise.resolve({
+          username: USERNAME,
+        })
+      }),
+      'aws-sdk': {
+        CognitoIdentityServiceProvider: class {
+          initiateAuth() {
+            return {
+              promise: () =>
+                Promise.resolve({
+                  AuthenticationResult: {
+                    IdToken: JWT,
+                  },
+                }),
+            }
+          }
+        },
+      },
     })
-})
+    const usernameLoginProvider = new UsernameLoginProvider(CLIENT_ID)
+
+    usernameLoginProvider
+      .login()
+      .then(() => {
+        t.fail()
+        t.end()
+      })
+      .catch(error => {
+        t.deepEqual(error, new Error('Please specify a password.'))
+        t.end()
+      })
+  },
+)

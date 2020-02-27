@@ -1,6 +1,6 @@
 'use strict'
 
-function requestMock (postFn, getFn) {
+function requestMock(postFn, getFn) {
   postFn = postFn || ((url, data, callback) => callback(null, {}, {}))
   getFn = getFn || ((url, callback) => callback(null, {}, {}))
   return {
@@ -9,7 +9,7 @@ function requestMock (postFn, getFn) {
     },
     get: (url, callback) => {
       getFn(url, callback)
-    }
+    },
   }
 }
 
