@@ -10,7 +10,8 @@ npm install @blinkmobile/bm-identity --save
 
 ```js
 const BlinkMobileIdentity = require('@blinkmobile/bm-identity')
-const blinkMobileIdentity = new BlinkMobileIdentity()
+const tenant = 'ONEBLINK' || 'CIVICPLUS'
+const blinkMobileIdentity = new BlinkMobileIdentity(tenant)
 ```
 
 ## Usage

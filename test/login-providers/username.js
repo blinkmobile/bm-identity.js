@@ -9,17 +9,13 @@ const inquirerMock = require('../helpers/inquirer.js')
 
 const TEST_SUBJECT = '../../lib/login-providers/username.js'
 
-const CLIENT_ID = 'valid client id'
 const JWT = 'valid jwt'
 const USERNAME = 'username'
 const PASSWORD = 'password'
 
 test.beforeEach(t => {
-  t.context.loginProviderBase = loginProviderBaseMock(
-    null,
-    (username, password, connection) => {
-      return Promise.resolve(JWT)
-    },
+  t.context.loginProviderBase = loginProviderBaseMock(null, () =>
+    Promise.resolve(JWT),
   )
 
   t.context.inquirer = inquirerMock()
@@ -43,7 +39,7 @@ test.cb('login() should return valid jwt', t => {
       },
     },
   })
-  const usernameLoginProvider = new UsernameLoginProvider(CLIENT_ID)
+  const usernameLoginProvider = new UsernameLoginProvider()
 
   usernameLoginProvider
     .login(USERNAME, PASSWORD)
@@ -51,8 +47,8 @@ test.cb('login() should return valid jwt', t => {
       t.is(jwt, JWT)
       t.end()
     })
-    .catch(() => {
-      t.fail()
+    .catch(e => {
+      t.fail(e)
       t.end()
     })
 })
@@ -88,7 +84,7 @@ test.cb(
         },
       },
     })
-    const usernameLoginProvider = new UsernameLoginProvider(CLIENT_ID)
+    const usernameLoginProvider = new UsernameLoginProvider()
 
     usernameLoginProvider
       .login()
@@ -96,7 +92,7 @@ test.cb(
         t.end()
       })
       .catch(e => {
-        t.fail()
+        t.fail(e)
         t.end()
       })
   },
@@ -124,12 +120,12 @@ test.cb(
         },
       },
     })
-    const usernameLoginProvider = new UsernameLoginProvider(CLIENT_ID)
+    const usernameLoginProvider = new UsernameLoginProvider()
 
     usernameLoginProvider
       .login()
       .then(() => {
-        t.fail()
+        t.fail(new Error('Login was suppose to throw an Error'))
         t.end()
       })
       .catch(error => {
@@ -163,12 +159,12 @@ test.cb(
         },
       },
     })
-    const usernameLoginProvider = new UsernameLoginProvider(CLIENT_ID)
+    const usernameLoginProvider = new UsernameLoginProvider()
 
     usernameLoginProvider
       .login()
       .then(() => {
-        t.fail()
+        t.fail(new Error('Login was suppose to throw an Error'))
         t.end()
       })
       .catch(error => {

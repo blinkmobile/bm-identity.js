@@ -1,5 +1,7 @@
 'use strict'
 
+const constants = require('../../lib/constants.js')
+
 const privateVars = new WeakMap()
 
 function loginProviderBaseMock(storeJwtFn, requestJwtFn) {
@@ -7,6 +9,7 @@ function loginProviderBaseMock(storeJwtFn, requestJwtFn) {
   requestJwtFn = requestJwtFn || ((u, p, c) => Promise.resolve('jwt'))
   return class LoginProvider {
     constructor(clientId, clientName) {
+      this.CONSTANTS = constants.TENANTS.ONEBLINK
       privateVars.set(this, {
         clientId,
         clientName,
