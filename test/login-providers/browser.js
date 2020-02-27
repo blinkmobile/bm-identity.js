@@ -42,7 +42,7 @@ test.beforeEach(t => {
     })
   })
 
-  t.context.opn = (url, options) => {}
+  t.context.open = (url, options) => {}
 
   t.context.base64url = base64urlMock(bytes => VERIFIER_CHALLENGE)
 })
@@ -56,7 +56,7 @@ test.cb('login() should return valid jwt', t => {
   const BrowserLoginProvider = proxyquire(TEST_SUBJECT, {
     inquirer: t.context.inquirer,
     request: t.context.request,
-    opn: t.context.opn,
+    open: t.context.open,
     base64url: t.context.base64url,
     './login-provider-base.js': t.context.loginProviderBase,
   })
@@ -78,16 +78,19 @@ test.cb('login() should call opn with correct data in url', t => {
   const BrowserLoginProvider = proxyquire(TEST_SUBJECT, {
     inquirer: t.context.inquirer,
     request: t.context.request,
-    opn: (url, options) => {
+    open: (url, options) => {
       const expectedQS = querystring.stringify({
         response_type: 'code',
         scope: constants.SCOPE,
-        client_id: constants.LOGIN_CLIENT_ID,
-        redirect_uri: constants.LOGIN_CALLBACK_URL,
+        client_id: constants.TENANTS.ONEBLINK.LOGIN_CLIENT_ID,
+        redirect_uri: constants.TENANTS.ONEBLINK.LOGIN_CALLBACK_URL,
         code_challenge: VERIFIER_CHALLENGE,
         code_challenge_method: 'S256',
       })
-      t.is(url, `${constants.LOGIN_URL}/authorize?${expectedQS}`)
+      t.is(
+        url,
+        `${constants.TENANTS.ONEBLINK.LOGIN_URL}/authorize?${expectedQS}`,
+      )
       t.deepEqual(options, {
         wait: false,
       })
@@ -108,7 +111,7 @@ test.cb('login() should log a message to the console', t => {
   const BrowserLoginProvider = proxyquire(TEST_SUBJECT, {
     inquirer: t.context.inquirer,
     request: t.context.request,
-    opn: t.context.opn,
+    open: t.context.open,
     base64url: t.context.base64url,
     './login-provider-base.js': t.context.loginProviderBase,
   })
@@ -148,7 +151,7 @@ test.cb('login() should prompt with the correct question', t => {
       })
     }),
     request: t.context.request,
-    opn: t.context.opn,
+    open: t.context.open,
     base64url: t.context.base64url,
     './login-provider-base.js': t.context.loginProviderBase,
   })
@@ -164,18 +167,18 @@ test.cb('login() should make request with the correct url and data', t => {
   const BrowserLoginProvider = proxyquire(TEST_SUBJECT, {
     inquirer: t.context.inquirer,
     request: requestMock((url, body, callback) => {
-      t.is(url, `${constants.LOGIN_URL}/oauth2/token`)
+      t.is(url, `${constants.TENANTS.ONEBLINK.LOGIN_URL}/oauth2/token`)
       t.deepEqual(body.form, {
         code: CODE,
         code_verifier: VERIFIER_CHALLENGE,
-        client_id: constants.LOGIN_CLIENT_ID,
+        client_id: constants.TENANTS.ONEBLINK.LOGIN_CLIENT_ID,
         grant_type: 'authorization_code',
-        redirect_uri: constants.LOGIN_CALLBACK_URL,
+        redirect_uri: constants.TENANTS.ONEBLINK.LOGIN_CALLBACK_URL,
       })
       t.end()
       callback(null, {}, {})
     }),
-    opn: t.context.opn,
+    open: t.context.open,
     base64url: t.context.base64url,
     './login-provider-base.js': t.context.loginProviderBase,
   })
@@ -194,7 +197,7 @@ test('login() should should reject if request returns an error', t => {
     request: requestMock((url, body, callback) => {
       callback(new Error('Test error message'))
     }),
-    opn: t.context.opn,
+    open: t.context.open,
     base64url: t.context.base64url,
     './login-provider-base.js': t.context.loginProviderBase,
   })
@@ -220,11 +223,11 @@ test.cb(
           },
         )
       }),
-      opn: t.context.opn,
+      open: t.context.open,
       base64url: t.context.base64url,
       './login-provider-base.js': t.context.loginProviderBase,
     })
-    const browserLoginProvider = new BrowserLoginProvider()
+    const browserLoginProvider = new BrowserLoginProvider('ONEBLINK')
 
     browserLoginProvider
       .login()

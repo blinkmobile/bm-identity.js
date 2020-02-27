@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- `tenant` argument to constructor
+
 ## 5.0.0 - 2019-03-05
 
 ### Changed

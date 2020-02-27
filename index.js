@@ -12,20 +12,31 @@ const getJWT = require('./lib/utils/get-jwt.js')
  * Class representing a Blink Mobile identity.
  */
 class BlinkMobileIdentity {
+  /* ::
+  tenant: ?Tenant
+  */
+
+  constructor(tenant /* : ?Tenant */) {
+    this.tenant = tenant
+  }
+
   /**
    * Login to a client using a Blink Mobile identity.
    * @param {Object} options - The login options.
    * @returns {String} The JWT generated after a successful login.
    */
   async login(options /* : ?LoginOptions */) /* : Promise<string> */ {
-    return login(options)
+    return login({
+      tenant: this.tenant,
+      ...options,
+    })
   }
 
   /**
    * Logout of the client.
    */
   async logout() /* : Promise<void> */ {
-    return logout()
+    return logout(this.tenant)
   }
 
   /**
@@ -58,7 +69,10 @@ class BlinkMobileIdentity {
 module.exports = BlinkMobileIdentity
 
 /* ::
+export type Tenant = 'CIVICPLUS' | 'ONEBLINK'
+
 export type LoginOptions = {
+  tenant: ?Tenant,
   password?: string,
   username?: string | true,
   storeJwt?: boolean
@@ -67,5 +81,12 @@ export type LoginOptions = {
 export type UserConfigStore = {
   load: () => Promise<Object>,
   update: (Object) => Promise<Object>
+}
+
+export type TenantData = {
+  AWS_REGION: string,
+  LOGIN_URL: string,
+  LOGIN_CLIENT_ID: string,
+  LOGIN_CALLBACK_URL: string
 }
 */
