@@ -1,7 +1,7 @@
 {
   "name": "@blinkmobile/bm-identity",
   "description": "Helper functions for Blink Mobiles single identity",
-  "version": "5.0.0",
+  "version": "5.1.0-beta.1",
   "author": "BlinkMobile <developers@oneblink.io> (https://github.com/blinkmobile)",
   "bugs": {
     "url": "https://github.com/blinkmobile/bm-identity.js/issues"
